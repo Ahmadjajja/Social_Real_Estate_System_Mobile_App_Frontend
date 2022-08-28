@@ -1,0 +1,42 @@
+[
+  {
+    "_id": "630b506954f8cf732bbdbee7",
+    "name": "Apartment"
+  },
+  {
+    "_id": "630b506943f164527fb149fd",
+    "name": "Challet"
+  },
+  {
+    "_id": "630b5069b6365a86f1f4cae8",
+    "name": "Twinhouse"
+  },
+  {
+    "_id": "630b50695b5ef3c45bd80458",
+    "name": "Studio"
+  },
+  {
+    "_id": "630b506955134700ab9a8a2a",
+    "name": "Studio"
+  },
+  {
+    "_id": "630b5069ccc47279d81bcf98",
+    "name": "villa"
+  },
+  {
+    "_id": "630b5069d8e5274e79121afe",
+    "name": "Twinhouse"
+  },
+  {
+    "_id": "630b50697432bdfee960742a",
+    "name": "Apartment"
+  },
+  {
+    "_id": "630b50698c52e4b9dff2cb96",
+    "name": "Twinhouse"
+  },
+  {
+    "_id": "630b5069a3adc5d831a4bbc9",
+    "name": "Studio"
+  }
+]
