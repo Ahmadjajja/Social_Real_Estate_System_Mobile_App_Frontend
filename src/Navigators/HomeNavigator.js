@@ -12,7 +12,7 @@ const MyStack = () => {
   return (
     <Stack.Navigator>
         <Stack.Screen 
-        name='Home'
+        name='home'
         component={ProductContainer}
         options = {{
             headerShown: false,

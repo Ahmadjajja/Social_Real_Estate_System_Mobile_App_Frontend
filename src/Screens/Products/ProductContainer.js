@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { View, ActivityIndicator, StyleSheet, Dimensions, FlatList, ScrollView } from 'react-native'
 import { Container, Header, Icon, Input, Item, Text, StatusBar, Box, HStack, IconButton, VStack, Heading, Ionicons } from 'native-base'
 import ProductList from "./ProductList.js";
@@ -6,6 +6,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SearchedProducts from './SearchedProducts.js';
 import Banner from "../../Shared/Banner"
 import CategoryFilter from "./CategoryFilter"
+import { ProductContext } from '../../Context/store/productGlobal.js';
 
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -28,66 +29,44 @@ const ProductContainer = (props) => {
   const [initialState, setInitialState] = useState([])
   const [loading, setLoading] = useState(true)
 
+  //context values
+  const { isLoader, setIsLoader, productsGlobal, setProductsGlobal, categoriesGlobal, setCategoriesGlobal } = useContext(ProductContext);
 
 
-  useFocusEffect((
-    useCallback(
-      () => {
+
+  useEffect(() => {
+    // console.log("res.data in productGlobal", productsGlobal);
 
 
-        setFocus(false)
-        setActive(-1)
-        // setProducts(data)
-        // setProductsFiltered(data);
-        // setProductsCtg(data)
-        // setInitialState(data)
-        // setLoading(false)
-        // console.log(data)
 
-        axios
-          .get(`${baseURL}products`)
-          .then((res) => {
-            setProducts(res.data)
-            setProductsFiltered(res.data);
-            setProductsCtg(res.data)
-            setInitialState(res.data)
-            setLoading(false)
-            console.log(res.data)
+    setFocus(false)
+    setActive(-1)
+    setProducts(productsGlobal)
+    setProductsFiltered(productsGlobal);
+    setProductsCtg(productsGlobal)
+    setInitialState(productsGlobal)
+    setLoading(false)
+    console.log("productsGlobal", productsGlobal)
 
 
-          })
-          .catch((error) => {
-            console.log("Api call error", error)
-          })
 
-        //Categories
-        // setCategories(productsCategories)
-        axios
-          .get(`${baseURL}categories`)
-          .then((res) => {
-            console.log(res.data)
-            setCategories(res.data)
-          })
-          .catch((error) => {
-            console.log("Api call error", error)
-          })
+    //Categories
+    setCategories(categoriesGlobal)
+    // console.log("categoriesGlobal in ")
 
 
-        return () => {
-          setProducts([])
-          // console.log(products)
-          setProductsFiltered([]);
-          setFocus()
-          setCategories([])
-          setActive()
-          setInitialState([])
-          setProductsCtg([])
-        }
-      },
-      [],
-    )
 
-  ))
+    return () => {
+      setProducts([])
+      // console.log(products)
+      setProductsFiltered([]);
+      setFocus()
+      setCategories([])
+      setActive()
+      setInitialState([])
+      setProductsCtg([])
+    }
+  }, [productsGlobal])
 
 
 
@@ -130,7 +109,7 @@ const ProductContainer = (props) => {
     <>
       {
         loading == false ? (
-          <Box style={{paddingBottom: 50}}>
+          <Box style={{ paddingBottom: 50 }}>
             <HStack py="3" justifyContent="space-between" alignItems="center" w="900%" maxW="350">
               <HStack >
                 <Input
@@ -167,65 +146,61 @@ const ProductContainer = (props) => {
                   <View>
                     <Banner />
                   </View>
-                  <View>
-                    <CategoryFilter
-                      categories={categories}
-                      CategoryFilter={changeCtg}
-                      productsCtg={productsCtg}
-                      active={active}
-                      setActive={setActive}
-                    />
-                  </View>
-
-                  {productsCtg.length > 0 ?  //may be filtered products but not yet confirm confusion going on
+                  {productsGlobal.length != 0 && categoriesGlobal != 0 ?
                     (
-                      <View style={styles.listContainer}>
-                        {
-                          productsCtg.map((item) => {
-                            return (
-                              <ProductList
-                                navigation={props.navigation}
-                                key={item._id}
-                                item={item}
-                              />
-                            )
-                          })
+                      <>
+                        <View>
+                          <CategoryFilter
+                            categories={categories}
+                            CategoryFilter={changeCtg}
+                            productsCtg={productsCtg}
+                            active={active}
+                            setActive={setActive}
+                          />
+                        </View>
+
+                        {productsCtg.length > 0 ?  //may be filtered products but not yet confirm confusion going on
+                          (
+                            <View style={styles.listContainer}>
+                              {
+                                productsCtg.map((item) => {
+                                  return (
+                                    <ProductList
+                                      navigation={props.navigation}
+                                      key={item._id}
+                                      item={item}
+                                    />
+                                  )
+                                })
+                              }
+
+                            </View>
+                          ) : (
+                            <View style={[styles.center, { height: height / 2 }]}>
+                              <Text>No products found</Text>
+                            </View>
+                          )
                         }
-
-                      </View>
-                    ) : (
-                      <View style={[styles.center, { height: height / 2 }]}>
-                        <Text>No products found</Text>
-                      </View>
+                      </>
+                    ) :
+                    (
+                      <>
+                        <Box style={ { backgroundColor: '#f2f2f2', flex: 1, paddingTop: 150}}>
+                          <ActivityIndicator size="large" color="red" />
+                        </Box>
+                      </>
                     )
-
                   }
                 </View>
               </ScrollView>
             )}
-            {/* <View style={styles.container}>
-                  <View style={styles.listContainer}>
-                    <FlatList
-
-                      key={'#'}
-                      // horizontal
-                      numColumns={2}
-                      data={products}
-                      renderItem={({ item }) => <ProductList
-                        key={item.brand}
-                        item={item}
-                      />}
-                      keyExtractor={(item) => item.brand}
-                    />
-                  </View>
-                </View> */}
           </Box>
 
         ) : (
-          <Box style={[styles.center, {backgroundColor: '#f2f2f2', flex: 1,}]}>
+          <Box style={{ backgroundColor: '#f2f2f2', height: "100%" }}>
             <ActivityIndicator size="large" color="red" />
           </Box>
-      )
+        )
       }
     </>
 
@@ -251,7 +226,7 @@ const styles = StyleSheet.create({
     paddingBottom: 50,
   }, center: {
     justifyContent: "center",
-    alignItems: "center" ,
+    alignItems: "center",
   }
 });
 

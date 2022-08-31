@@ -49,14 +49,15 @@ const UserProfile = (props) => {
     return (
         <Box style={styles.container}>
             <ScrollView contentContainerStyle={styles.subContainer}>
-                <Heading style={{ fontSize: 30 }}>
-                    {userProfile ? userProfile.name : "name"}
-                </Heading>
+                <Text style={{ fontSize: 30 }}>
+                    userName: 
+                    {userProfile ? userProfile.userName : "User Name"}
+                </Text>
                 <View style={{ marginTop: 20 }}>
-                    <Text style={{ margin: 10 }}>
+                    <Text style={{ margin: 10, fontSize: 20 }}>
                         Email: {userProfile ? userProfile.email : "something wrong with userProfile"}
                     </Text>
-                    <Text style={{ margin: 10 }}>
+                    <Text style={{ margin: 10, fontSize: 20 }}>
                         Phone: {userProfile ? userProfile.phone : "something wrong with userProfile"}
                     </Text>
                 </View>

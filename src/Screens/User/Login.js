@@ -1,5 +1,6 @@
-import React, { useEffect,useContext, useState } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import React, { useEffect, useContext, useState } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { Button, Box } from "native-base"
 
 import FormContainer from '../../Shared/Form/FormContainer';
 import Input from '../../Shared/Form/Input';
@@ -17,12 +18,12 @@ const Login = (props) => {
     const [password, setPassword] = useState("")
     const [error, setError] = useState("")
 
-    useEffect(() => { 
+    useEffect(() => {
         if (context.stateUser.isAuthenticated === true) {
             props.navigation.navigate("User Profile");
         }
     }, [context.stateUser.isAuthenticated])
-    
+
 
     const handleSubmit = () => {
         const user = {
@@ -56,17 +57,25 @@ const Login = (props) => {
                 value={password}
                 onChangeText={(Text) => setPassword(Text)}
             />
-            <View style={styles.buttonGroup}>
-                { error ? <Error message={error}/> : null }
-                <Button title="Login" onPress={() => handleSubmit()}/>
+            <View  style={styles.buttonGroup}>
+            {error ? <Error message={error} /> : null}
+            <Box width="100%">
+                <Button onPress={() => handleSubmit()}>
+                    Login
+                </Button>
+            </Box>
             </View>
             <View style={[{ marginTop: 40 }, styles.buttonGroup]}>
                 <Text style={styles.middleText}>
                     Don't have an account yet?
                 </Text>
-                <Button
-                    title="Register" onPress={() => props.navigation.navigate("Register")}
-                />
+                <Box 
+                width="100%"
+                >
+                    <Button onPress={() => props.navigation.navigate("Register")}>
+                        Register
+                    </Button>
+                </Box>
             </View>
         </FormContainer >
     )
@@ -75,7 +84,7 @@ const Login = (props) => {
 const styles = StyleSheet.create({
     buttonGroup: {
         width: '80%',
-        alignItems: 'center'
+        alignItems: 'center',
     },
     middleText: {
         marginBottom: 20,

@@ -1,140 +1,54 @@
 import React, { useState } from 'react'
 import { Box, Input, NativeBaseProvider, Image, Text, VStack, Select, CheckIcon, Button, FormControl, Stack, ScrollView, TextArea, Center, } from 'native-base'
-// import storage from '@react-native-firebase/storage';
-// import { launchImageLibrary } from "react-native-image-picker";
-// import firebase from "@react-native-firebase/app";
-// import firestore from "@react-native-firebase/firestore";
-
 import {
-    TouchableOpacity, FlatList, View,
+    TouchableOpacity, FlatList, View, Dimensions
 } from 'react-native';
+
+var { width } = Dimensions.get("window")
+
 export default function Addproducts() {
-    // const [images, setImages] = useState([])
-    // const [category, setCategory] = useState(null)
-    // const [urls, setUrls] = useState([])
-    // const [state, setState] = useState({
-    //     nameProduct: "",
-    //     price: "",
-    //     room: "",
-    //     duration: "",
-    //     location: "",
-    //     description: ""
-    // })
+    const [category, setCategory] = useState(category)
+    const [reception, setReception] = useState("NO")
+    const [product, setProduct] = useState({
+        tital: "",
+        location: "",
+        finishType: "",
+        noOfBedrooms: 0,
+        noOfBathrooms: 0,
+        livingRooms: 0,
+        reception: false,
+        image: "",
+        price: 0,
+        category: "",
+        area: 0,
+        diningRooms: 0,
+        kitchen: 0,
+    })
 
 
 
-    // const handleChange = (name, value) => {
-    //     setState(s => ({ ...s, [name]: value }))
-    // }
+    const handleChange = (name, value) => {
+        setProduct(s => ({ ...s, [name]: value }))
+    }
 
-    // let options = {
-    //     title: 'Select Images',
-    //     customButtons: [
-    //         {
-    //             name: 'customOptionKey',
-    //             title: 'Choose file from Custom Option',
-    //         },
-    //     ],
-    //     storageOptions: {
-    //         skipBackup: true,
-    //         path: 'images',
-    //     },
-    //     selectionLimit: 4
-    // };
-
-    // const handleSelcetImages = async (e) => {
-    //     await launchImageLibrary(options, (response) => {
-    //         if (response.didCancel) {
-    //             console.log('User cancelled image picker');
-    //         } else if (response.error) {
-    //             console.log('ImagePicker Error: ', response.error);
-    //         } else if (response.customButton) {
-    //             console.log('User tapped custom button: ', response.customButton);
-    //             alert(response.customButton);
-    //         }
-    //         else if (response.assets.length < 3) {
-    //             alert("please add 3 to 4 images")
-    //         } else if (response.assets.length > 4) {
-    //             alert("please add 3 to 4 images")
-    //         }
-    //         else {
-    //             for (let i = 0; i < response.assets.length; i++) {
-    //                 const newImage = response.assets[i];
-    //                 newImage["id"] = Math.random();
-    //                 setImages((prevState) => [...prevState, newImage]);
-    //             }
-    //         }
-    //     });
-    // }
-    // const handleUpload = async () => {
-    //     // if (state.nameProduct === "") {
-    //     //     return alert(" Please enter Products Name")
-    //     // }
-    //     // if (state.price === "") {
-    //     //     return alert("Please enter Price")
-    //     // }
-    //     // if (state.calorie === "") {
-    //     //     return alert("Please enter calorie")
-    //     // }
-    //     // if (state.duration === "") {
-    //     //     return alert("Please enter duration")
-    //     // }
-    //     // if (state.location === "") {
-    //     //     return alert("Please enter location")
-    //     // }
-    //     // if (state.category === null) {
-    //     //     return alert("Please enter category")
-    //     // } 
-    //     if (category === "House") {
-    //         return {
-    //             category,
-    //             url: "https://firebasestorage.googleapis.com/v0/b/native-app-d0681.appspot.com/o/images%2Frn_image_picker_lib_temp_a123cfb6-9654-40ed-b5a7-11ef268b532b.jpg?alt=media&token=64e6a00a-43ec-4b2e-b62b-c53076d111e7"
-    //         }
-    //     }
-
-    //     // if (images.length === 0) {
-    //     //     return alert("Please Selected Images")
-    //     // }
-
-    //     const urls = [];
-    //     images.map(async (image, i) => {
-    //         await storage().ref(`images/${image.fileName}`).putFile(image.uri)
-    //             .then(async () => {
-    //                 const url = await storage().ref(`images/${image.fileName}`).getDownloadURL();
-    //                 console.log(url)
-    //                 urls.push(url)
-    //             })
-    //             .catch(err => {
-    //                 console.error("err at " + i + " =>", err)
-    //             })
-    //         if (i === (images.length - 1)) {
-    //             let formData = {
-    //                 nameProduct: state.nameProduct,
-    //                 price: Number(state.price),
-    //                 room: Number(state.room),
-    //                 duration: state.duration,
-    //                 category: category,
-    //                 description: state.description,
-    //                 location: state.location,
-    //                 images: urls,
-    //                 createDate: firebase.firestore.FieldValue.serverTimestamp(),
-    //                 id: Math.random().toString(36).slice(2)
-    //             }
-    //             console.log("formData before images uploaded =>", formData)
-
-    //             await firestore().collection('products').doc(formData.id).set(formData)
-    //                 .then(() => {
-    //                     alert("products has been successfully added.")
-    //                     setImages([])
-    //                 })
-    //                 .catch(err => {
-    //                     console.error(err)
-    //                 })
-    //             console.log("formData after images uploaded =>", formData)
-    //         }
-    //     })
-
-    // };
+    const handleSubmit = () => {
+        let productData = {
+            tital: product.tital,   
+            location: product.location,
+            finishType: product.finishType,  
+            noOfBedrooms: product.noOfBedrooms,
+            noOfBathrooms: product.noOfBathrooms,
+            livingRooms: product.livingRooms,
+            reception: reception === "YES" ? true : false,
+            image: product.image,
+            price: Number(product.price),
+            category: product.category,
+            area: Number(product.area),
+            diningRooms: Number(product.diningRooms),
+            kitchen: Number(product.kitchen),
+        }
+        console.log("productData before images uploaded =>", product);
+    }
 
 
 
@@ -146,24 +60,44 @@ export default function Addproducts() {
                 paddingHorizontal: 20,
                 marginTop: 30
             }}>
-                <Box w="100%" safeArea>
+                <ScrollView>
+
                     <FormControl isRequired>
-                        <Box flexDirection="row">
-                            <Stack w="50%" maxWidth="180px">
-                                <FormControl.Label>Product Name</FormControl.Label>
+                        <Box flexDirection="column">
+                            <Stack w="100%" >
+                                <FormControl.Label>Title</FormControl.Label>
                                 <Input _light={{
                                     bg: 'coolGray.100'
                                 }} _dark={{
                                     bg: 'coolGray.800'
                                 }} _hover={{
                                     bg: 'coolWhite.200'
-                                }} shadow={2} placeholder="Product Name"
+                                }} shadow={2} placeholder="Product Title"
                                     isRequired
-                                    // onChangeText={(value) => handleChange("nameProduct", value)}
-                                    // value={state.nameProduct}
+                                // onChangeText={(value) => handleChange("nameProduct", value)}
+                                // value={product.nameProduct}
                                 />
                             </Stack>
-                            <Stack mx="2" w="50%" maxWidth="180px">
+                            <VStack w="100%">
+                                <FormControl.Label>Finish Type</FormControl.Label>
+                                <Select shadow={2}
+                                    minWidth="180px" accessibilityLabel="Choose Category"
+                                    placeholder="Choose Finish Type" _selectedItem={{
+                                        bg: 'teal.600',
+                                        endIcon: <CheckIcon size="5" />
+                                    }} _light={{
+                                        bg: 'coolGray.100'
+                                    }} _dark={{
+                                        bg: 'coolGray.800'
+                                    }}
+                                // onValueChange={itemValue => setCategory(itemValue)}
+                                >
+                                    <Select.Item shadow={2} label="Furnished" value="Furnished" />
+                                    <Select.Item shadow={2} label=" Finished with ACs & Kitchen" value=" Finished with ACs & Kitchen" />
+                                    <Select.Item shadow={2} label=" Finished without ACs" value=" Finished without ACs" />
+                                </Select>
+                            </VStack>
+                            {/* <Stack mx="2" w="50%" maxWidth="180px">
                                 <FormControl.Label>Price</FormControl.Label>
                                 <Input _light={{
                                     bg: 'coolGray.100'
@@ -173,43 +107,121 @@ export default function Addproducts() {
                                     bg: 'coolWhite.200'
                                 }} shadow={2} placeholder="$ Price"
                                     keyboardType="numeric"
-                                    // onChangeText={(value) => handleChange("price", value)}
-                                    // value={state.price}
+                                // onChangeText={(value) => handleChange("price", value)}
+                                // value={product.price}
                                 />
-                            </Stack>
+                            </Stack> */}
                         </Box>
-                        <Box flexDirection="row">
-                            <Stack w="50%" maxWidth="180px">
-                                <FormControl.Label>room</FormControl.Label>
+                        <Box flexDirection="column">
+                            <Stack w="100%" >
+                                <FormControl.Label>Bedrooms</FormControl.Label>
                                 <Input _light={{
                                     bg: 'coolGray.100'
                                 }} _dark={{
                                     bg: 'coolGray.800'
                                 }} _hover={{
                                     bg: 'coolWhite.200'
-                                }} shadow={2} placeholder="Calorie"
-                                    // onChangeText={(value) => handleChange("room", value)}
-                                    // value={state.room}
+                                }} shadow={2} placeholder="Bedrooms"
+                                // onChangeText={(value) => handleChange("room", value)}
+                                // value={product.room}
                                     keyboardType="numeric"
                                 />
                             </Stack>
-                            <Stack mx="2" w="50%" maxWidth="180px">
-                                <FormControl.Label>Duration</FormControl.Label>
+                            <Stack  w="100%" >
+                                <FormControl.Label>Bathrooms</FormControl.Label>
                                 <Input _light={{
                                     bg: 'coolGray.100'
                                 }} _dark={{
                                     bg: 'coolGray.800'
                                 }} _hover={{
                                     bg: 'coolWhite.200'
-                                }} shadow={2} placeholder="Duration min"
-                                    // onChangeText={(value) => handleChange("duration", value)}
+                                }} shadow={2} placeholder="Bathrooms"
+                                keyboardType="numeric"
+                                // onChangeText={(value) => handleChange("duration", value)}
                                 />
                             </Stack>
                         </Box>
-                        <Box flexDirection="row">
-                            <VStack >
+                        <Box flexDirection="column">
+                            <Stack w="100%" >
+                                <FormControl.Label>Area</FormControl.Label>
+                                <Input _light={{
+                                    bg: 'coolGray.100'
+                                }} _dark={{
+                                    bg: 'coolGray.800'
+                                }} _hover={{
+                                    bg: 'coolWhite.200'
+                                }} shadow={2} placeholder="Area"
+                                // onChangeText={(value) => handleChange("room", value)}
+                                    // value={product.room}
+                                    keyboardType="numeric"
+                                    />
+                            </Stack>
+                            <Stack  w="100%" >
+                                <FormControl.Label>Dining Rooms</FormControl.Label>
+                                <Input _light={{
+                                    bg: 'coolGray.100'
+                                }} _dark={{
+                                    bg: 'coolGray.800'
+                                }} _hover={{
+                                    bg: 'coolWhite.200'
+                                }} shadow={2} placeholder="Bathrooms"
+                                // onChangeText={(value) => handleChange("duration", value)}
+                                keyboardType="numeric"
+                                />
+                            </Stack>
+                        </Box>
+                        <Box flexDirection="column">
+                            <Stack w="100%">
+                                <FormControl.Label>Living Rooms</FormControl.Label>
+                                <Input _light={{
+                                    bg: 'coolGray.100'
+                                }} _dark={{
+                                    bg: 'coolGray.800'
+                                }} _hover={{
+                                    bg: 'coolWhite.200'
+                                }} shadow={2} placeholder="Living Rooms"
+                                    // onChangeText={(value) => handleChange("room", value)}
+                                    // value={product.room}
+                                    keyboardType="numeric"
+                                    />
+                            </Stack>
+                            <VStack w="100%">
+                                <FormControl.Label>Reception</FormControl.Label>
+                                <Select shadow={2}
+                                    minWidth="180px" accessibilityLabel="Choose Reception"
+                                    placeholder="Choose Reception" _selectedItem={{
+                                        bg: 'teal.600',
+                                        endIcon: <CheckIcon size="5" />
+                                    }} _light={{
+                                        bg: 'coolGray.100'
+                                    }} _dark={{
+                                        bg: 'coolGray.800'
+                                    }}
+                                    // onValueChange={itemValue => setCategory(itemValue)}
+                                >
+                                    <Select.Item shadow={2} label="Yes" value="Yes" />
+                                    <Select.Item shadow={2} label="NO" value="NO" />
+                                </Select>
+                            </VStack>
+                        </Box>
+                        <Box flexDirection="column">
+                            <Stack w="100%">
+                                <FormControl.Label>Price</FormControl.Label>
+                                <Input _light={{
+                                    bg: 'coolGray.100'
+                                }} _dark={{
+                                    bg: 'coolGray.800'
+                                }} _hover={{
+                                    bg: 'coolWhite.200'
+                                }} shadow={2} placeholder="Price"
+                                    // onChangeText={(value) => handleChange("room", value)}
+                                    // value={product.room}
+                                    keyboardType="numeric"
+                                    />
+                            </Stack>
+                            <VStack w="100%">
                                 <FormControl.Label>Category</FormControl.Label>
-                                <Select shadow={2} 
+                                <Select shadow={2}
                                     minWidth="180px" accessibilityLabel="Choose Category"
                                     placeholder="Choose Category" _selectedItem={{
                                         bg: 'teal.600',
@@ -218,72 +230,64 @@ export default function Addproducts() {
                                         bg: 'coolGray.100'
                                     }} _dark={{
                                         bg: 'coolGray.800'
-                                    }} 
+                                    }}
                                     // onValueChange={itemValue => setCategory(itemValue)}
                                 >
-                                    <Select.Item shadow={2} label="House" value="House" />
-                                    <Select.Item shadow={2} label="Hotel" value="Hotel" />
-                                    <Select.Item shadow={2} label="condo" value="condo" />
                                     <Select.Item shadow={2} label="Apartment" value="Apartment" />
+                                    <Select.Item shadow={2} label="Villa" value="Villa" />
+                                    <Select.Item shadow={2} label="Studio" value="Studio" />
+                                    <Select.Item shadow={2} label="Challet" value="Challet" />
+                                    <Select.Item shadow={2} label="Twinhouse" value="Townhouse" />
                                 </Select>
                             </VStack>
-                            <Stack mx="2" w="50%" maxWidth="180px">
-                                <FormControl.Label>Location</FormControl.Label>
+                        </Box>
+                        <Box flexDirection="row" justifyContent={"center"}>
+                            <Stack w="100%" >
+                                <FormControl.Label>kitchen</FormControl.Label>
                                 <Input _light={{
                                     bg: 'coolGray.100'
                                 }} _dark={{
                                     bg: 'coolGray.800'
                                 }} _hover={{
                                     bg: 'coolWhite.200'
-                                }} shadow={2} placeholder="Location"
-                                    // onChangeText={(value) => handleChange("location", value)}
-                                    // value={state.location}
-                                />
+                                }} shadow={2} placeholder="Kitchen"
+                                // onChangeText={(value) => handleChange("room", value)}
+                                // value={product.room}
+                                    keyboardType="numeric"
+                                    />
                             </Stack>
                         </Box>
-                        <FormControl.Label>Description</FormControl.Label>
-                        <Box alignItems="center" w="100%" marginTop="2" shadow={2}>
+                        <Box alignItems="center" w="100%" marginTop="2" shadow={2} style={{marginBottom: 270}}>
+                        <FormControl.Label style={{paddingRight: 175}}>Location</FormControl.Label>
                             <TextArea h={20} placeholder="Description Here" w="75%"
                                 // onChangeText={(value) => handleChange("description", value)}
-                                // value={state.description}
+                                // value={product.description}
                                 maxW="300" />
                         </Box>
                         {/* {images.length === 0 ? ( */}
 
-                            <Box maxWidth="320"
-                                width='70%'
-                                height='22%'
-                                backgroundColor="teal.300"
-                                justifyContent="center"
-                                alignItems="center"
-                                margin="auto"
+                        <Box maxWidth="320"
+                            width='75%'
+                            height='22%'
+                            backgroundColor="teal.300"
+                            justifyContent="center"
+                            alignItems="center"
+                            margin="auto"
+                            style={{marginBottom: 10}}
                             >
-                                <TouchableOpacity
-                                    // onPress={handleSelcetImages}
-                                >
-                                    <Text style={{
-                                        color: "red"
-                                    }}>Add Image</Text>
-                                </TouchableOpacity>
-                            </Box>
-                        {/* ) : (
-                            images.map((item, index) => {
-                                return (
-                                    <Center key={index} >
-                                        <Image margin="2" source={{
-                                            uri: item.uri
-                                        }} alt="Alternate Text" size='xs' />
-                                    </Center>
-                                )
-                            })
-
-                        )
-                        } */}
+                            <TouchableOpacity
+                            // onPress={handleSelcetImages}
+                            >
+                                <Text style={{
+                                    color: "red"
+                                }}>Add Image</Text>
+                            </TouchableOpacity>
+                        </Box>    
                         <Box >
-                            <Button >Add Products</Button>
+                            <Button onPress={() => handleSubmit}>Add Products</Button>
                         </Box>
                     </FormControl>
-                </Box>
+                        </ScrollView>
             </View>
         </NativeBaseProvider >
     )

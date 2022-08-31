@@ -12,6 +12,7 @@ import store from './src/Redux/Store';
 
 //Context API
 import Auth from './src/Context/store/Auth';
+import ProductContextProvider from './src/Context/store/productGlobal';
 
 //screens
 import ProductContainer from './src/Screens/Products/ProductContainer'
@@ -20,17 +21,20 @@ import Header from "./src/Shared/Header"
 const App = () => {
   LogBox.ignoreAllLogs()
   return (
-    <Auth>
-      <Provider store={store}>
-        <NativeBaseProvider >
-          <NavigationContainer >
-            <Header />
-            <Main />
-            <Toast ref={(ref) => setRef(ref)} />
-          </NavigationContainer>
-        </NativeBaseProvider>
-      </Provider>
-    </ Auth>
+    <ProductContextProvider>
+      <Auth>
+        <Provider store={store}>
+          <NativeBaseProvider >
+            <NavigationContainer >
+              <Header />
+              <Main />
+              <Toast />
+              {/* <Toast ref={(ref) => setRef(ref)} /> */}
+            </NavigationContainer>
+          </NativeBaseProvider>
+        </Provider>
+      </ Auth>
+    </ProductContextProvider>
   )
 }
 

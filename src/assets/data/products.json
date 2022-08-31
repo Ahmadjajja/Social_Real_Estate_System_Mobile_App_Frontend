@@ -6,7 +6,7 @@
     "finishType": "Furnished with ACs and kitchen",
     "noOfBedrooms": 2,
     "noOfBathrooms": 1,
-    "livingRooms": 6,
+    "livingRooms": 6, 
     "reception": false,
     "image": "https://images.pexels.com/photos/221024/pexels-photo-221024.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
     "price": 2494852,
@@ -26,7 +26,7 @@
     "reception": true,
     "image": "https://images.pexels.com/photos/415687/pexels-photo-415687.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
     "price": 3811841,
-    "category": "630b506943f164527fb149fd",
+    "category": "630b506954f8cf732bbdbee7",
     "area": 3425,
     "diningRooms": 1,
     "kitchen": 4
@@ -43,7 +43,7 @@
     "reception": true,
     "image": "https://images.pexels.com/photos/1438834/pexels-photo-1438834.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
     "price": 2936279,
-    "category": "630b5069b6365a86f1f4cae8",
+    "category": "630b506954f8cf732bbdbee7",
     "area": 3177,
     "diningRooms": 2,
     "kitchen": 3
@@ -60,7 +60,7 @@
     "reception": false,
     "image": "https://images.pexels.com/photos/221540/pexels-photo-221540.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
     "price": 3159555,
-    "category": "630b50695b5ef3c45bd80458",
+    "category": "630b5069ccc47279d81bcf98",
     "area": 1425,
     "diningRooms": 4,
     "kitchen": 3
@@ -76,7 +76,7 @@
     "reception": false,
     "image": "https://images.pexels.com/photos/280232/pexels-photo-280232.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
     "price": 3767790,
-    "category": "630b506955134700ab9a8a2a",
+    "category": "630b506954f8cf732bbdbee7",
     "area": 2569,
     "diningRooms": 3,
     "kitchen": 3
@@ -112,7 +112,7 @@
     "gender": "female",
     "tital": "Pennsylvania",
     "location": "106 Ovington Court, Sims, Wyoming, 5746",
-    "category": "630b5069d8e5274e79121afe",
+    "category": "630b506943f164527fb149fd",
     "area": 2161,
     "diningRooms": 2,
     "kitchen": 3
@@ -130,7 +130,7 @@
     "gender": "female",
     "tital": "Georgia",
     "location": "831 Moore Place, Caberfae, Indiana, 1208",
-    "category": "630b50697432bdfee960742a",
+    "category": "630b5069b6365a86f1f4cae8",
     "area": 1399,
     "diningRooms": 1,
     "kitchen": 3
@@ -148,7 +148,7 @@
     "gender": "male",
     "tital": "Virginia",
     "location": "698 Rugby Road, Remington, Oklahoma, 2653",
-    "category": "630b50698c52e4b9dff2cb96"
+    "category": "630b5069b6365a86f1f4cae8"
   },
   {
     "_id": "630b4fb7d496f12eb5fb399e",
@@ -163,7 +163,7 @@
     "gender": "male",
     "tital": "Nebraska",
     "location": "516 Emerson Place, Cade, Nebraska, 743",
-    "category": "630b5069a3adc5d831a4bbc9",
+    "category": "630b50695b5ef3c45bd80458",
     "area": 1779,
     "diningRooms": 2,
     "kitchen": 2

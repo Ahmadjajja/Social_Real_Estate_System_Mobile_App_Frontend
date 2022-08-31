@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, Text, StyleSheet} from 'react-native';
+import { Button, Box } from "native-base"
 import axios from 'axios';
 import baseURL from '../../assets/common/baseUrl';
 
@@ -39,7 +40,7 @@ const Register = (props) => {
         axios
             .post(`${baseURL}users/register`, user)
             .then((res) => {
-                if (res.status == 200) {
+                if (res.status === 200) {
                     setTimeout(() => {
                         Toast.show({
                             topOffset: 60,
@@ -48,10 +49,13 @@ const Register = (props) => {
                             text2: "Please login into your account"
                         })
                         props.navigation.navigate("Login")
+                        console.log("res", res)
+                        console.log("res.data", res.data)
                     }, 500)
                 }
             })
             .catch((error) => {
+                console.error("error", error)
                 Toast.show({
                     topOffset: 60,
                     type: "error",
@@ -122,16 +126,24 @@ const Register = (props) => {
             <View>
                 {error ? <Error message={error} /> : null}
             </View>
-            <View style={styles.buttonGroup}>
-                <Button title="Register" onPress={() => register()} />
+
+            <View style={[{ marginTop: 40 }, styles.buttonGroup]}>
+                <Box 
+                width="100%"
+                >
+                    <Button onPress={() => register()}>
+                        Register
+                    </Button>
+                </Box>
             </View>
             <View style={[{ marginTop: 40 }, styles.buttonGroup]}>
-                {/* <Text style={styles.middleText}>
-                    Don't have an account yet?
-                </Text> */}
-                <Button
-                    title="Back to Login " onPress={() => props.navigation.navigate("Register")}
-                />
+                <Box 
+                width="100%"
+                >
+                    <Button onPress={() => props.navigation.navigate("Login")}>
+                    Back to Login
+                    </Button>
+                </Box>
             </View>
         </FormContainer >
     )
