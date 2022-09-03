@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Input, NativeBaseProvider, Image, Text, VStack, Select, CheckIcon, Button, FormControl, Stack, ScrollView, TextArea, Center, Heading, Toast } from 'native-base';
-import { TouchableOpacity, FlatList, View, Dimensions, StyleSheet, Platform } from 'react-native';
+import { Box, Input, NativeBaseProvider, Image, Text, VStack, Select, CheckIcon, Button, FormControl, Stack, ScrollView, TextArea, Center, Heading } from 'native-base';
+import { TouchableOpacity, FlatList, View, Dimensions, StyleSheet, Platform, TextInput,Alert } from 'react-native';
 import Icon from "react-native-vector-icons/FontAwesome";
 import * as ImagePicker from "expo-image-picker";
 import baseURL from "../../assets/common/baseUrl";
@@ -8,23 +8,26 @@ import axios from 'axios';
 import AsyncStorage from "@react-native-community/async-storage";
 import mime from "mime";
 import Error from "../../Shared/Error"
-
-
+//react-native image picker
+import { launchImageLibrary } from 'react-native-image-picker';
 var { width } = Dimensions.get("window")
+import Toast from 'react-native-toast-message'
 
 
 export default function CreateProduct(props) {
 
     const [categories, setCategories] = useState([])
-    const [pickerValue, setPickerValue] = useState();
-    const [mainImage, setMainImage] = useState('');
+    const [photo, setPhoto] = useState('');
     const [image, setImage] = useState('');
     const [token, setToken] = useState();
     const [err, setErr] = useState();
+    const [uploading, setUploading] = useState(false)
+    const [uploadingMessage, setUploadingMessage] = useState("Uploading Image...")
 
     const [finishType, setFininshType] = useState('');
     const [reception, setReception] = useState()
-    const [category, setCategory] = useState('')
+    const [category, setCategory] = useState()
+    const [categoryId, setCategoryId] = useState('')
 
     const [product, setProduct] = useState({
         tital: "",
@@ -45,7 +48,9 @@ export default function CreateProduct(props) {
             .then((res) => {
                 setToken(res)
             })
-            .catch((error) => console.log(error))
+            .catch((error) => console.log(error));
+
+        console.log("Token", token)
 
         // Categories
         axios
@@ -55,17 +60,7 @@ export default function CreateProduct(props) {
 
         console.log("categories in createProducts folder", categories);
 
-        //ImagePicker
-        (async () => {
-            if (Platform.OS !== "web") {
-                const {
-                    status,
-                } = await ImagePicker.requestCameraPermissionsAsync();
-                if (status !== "granted") {
-                    alert("Sorry, we need camera roll permissions to make this work!")
-                }
-            }
-        })(); //close callback here
+
 
 
         return () => {
@@ -73,32 +68,78 @@ export default function CreateProduct(props) {
         }
     }, [])
 
-    const pickImage = async () => {
-        // console.log("pickImage working");
-        // console.log('result.uri,', result.uri)
-        let result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaTypeOptions.All,
-            allowsEditing: true,
-            aspect: [4, 3],
-            quality: 1,
+
+
+    const selectPhotoTapped = () => {
+        const options = {    //it’s an object for customizing the image picker.
+            title: 'Select Photo',
+            storageOptions: {
+                skipBackup: true,
+                path: 'images',
+            },
+        };
+        launchImageLibrary(options, (response) => {
+
+            console.log('Response = ', response);
+            console.log("response", response)
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            } else {
+                const uri = response.assets[0].uri;
+                const type = response.assets[0].type;
+                const name = response.assets[0].fileName;
+                const source = {
+                    uri,
+                    type,
+                    name,
+                }
+                cloudinaryUpload(source)
+                console.log("Image source=>", source)
+
+            }
         });
-
-        if (!result.cancelled) {
-            setMainImage(result.uri); 
-            setImage(result.uri);
-            console.log('result.uri');
-        }
-        console.log("Image", Image);
-        console.log('mainImage', mainImage)
     }
-
-
+    const cloudinaryUpload = (Photo) => {
+        setUploading(true)
+        const data = new FormData()
+        data.append('file', Photo)
+        data.append('upload_preset', 'jajja-group-of-company')
+        data.append("cloud_name", "jajja-group-of-company")
+        
+        console.log("image uploading gonna start...")
+        fetch("https://api.cloudinary.com/v1_1/jajja-group-of-company/upload", {
+            method: "post",
+            body: data
+        }).then(res => res.json()).
+            then(data => {
+                console.log("data.secure_url", data.secure_url)
+                setPhoto(data.secure_url)
+                Toast.show({
+                    topOffset: 60,
+                    type: "success",
+                    text1: "Image Uploaded Successfuly!",
+                    text2: ""
+                })
+                setUploading(false)
+            }).catch(err => {
+                setPhoto(data.secure_url)
+                setUploading(false)
+                Toast.show({
+                    topOffset: 60,
+                    type: "Error",
+                    text1: "An Error Occured While Uploading!",
+                    text2: ""
+                })
+            })
+    }
 
     const handleChange = (name, value) => {
         setProduct(s => ({ ...s, [name]: value }))
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
 
         if (
             product.tital == "" ||
@@ -118,67 +159,73 @@ export default function CreateProduct(props) {
             setErr("Please fill in the form correctly")
         } else {
             setErr('')
+            console.log("category ", category)
+            console.log("categories gonna looping and find specific", categories)
             categories.forEach((item) => {
-                if (category === item.name) {
+                console.log(item.name.toLowerCase())
+                console.log(category.toLowerCase())
+                if (item.name.toLowerCase() === category.toLowerCase()) {
                     console.log("ID of category => ", item.id, item.name)
-                    setCategory(item.id)
+                    setCategoryId(item.id)
                 }
             })
 
-            const newImageUri = "file:///" + image.split("file:/").join("");  //uses for android
-            // image       => uses for android
+
+
+
 
             let productData = {
                 tital: product.tital,
                 location: product.location,
                 finishType: finishType,
-                noOfBedrooms: product.noOfBedrooms,
-                noOfBathrooms: product.noOfBathrooms,
-                livingRooms: product.livingRooms,
+                noOfBedrooms: Number(product.noOfBedrooms),
+                noOfBathrooms: Number(product.noOfBathrooms),
+                livingRooms: Number(product.livingRooms),
                 reception: reception,
-                image: {
-                    uri: image,
-                    type: mime.getType(image),
-                    name: image.split("/").pop()
-                },
+                image: photo,
+                images: [],
                 price: Number(product.price),
-                category: category,
+                category: categoryId,
                 area: Number(product.area),
                 diningRooms: Number(product.diningRooms),
                 kitchen: Number(product.kitchen),
             }
+
             console.log("productData  =>", productData);
 
             const config = {
                 headers: {
-                    "Content-Type": "multipart/form-Data", 
+                    "Content-Type": "multipart/form-Data",
                     Authorization: `Bearer ${token}`
                 }
             }
-        
+            console.log("config=> ", config)
+            console.log("gonna start posting")
             axios
-            .post(`${baseURL}products`, productData, config)
-            .then((res) => {
-                if( res.status == 200 || res.status == 201 ){
+                .post(`${baseURL}products`, productData, config)
+                .then((res) => {
+                    if (res.status == 200 || res.status == 201) {
+                        console.log("post data successfull")
+                        Toast.show({
+                            topOffset: 60,
+                            type: "success",
+                            text1: "New Product added",
+                            text2: ""
+                        })
+                        setTimeout(() => {
+                            props.navigation.navigate("Products");
+                        }, 500)
+                    }
+                })
+                .catch((error) => {
+                    console.log("Error Occured While Posting",error)
                     Toast.show({
                         topOffset: 60,
-                        type: "success",
-                        text1: "New Product added",
-                        text2: ""
+                        type: "error",
+                        text1: "Something went wrong",
+                        text2: "please try again"
                     })
-                    setTimeout(() => {
-                        props.navigation.navigate("Products");
-                    }, 500)
-                }
-            })
-            .catch((error) => {
-                Toast.show({
-                    topOffset: 60,
-                    type: "error",
-                    text1: "Something went wrong",
-                    text2: "please try again"
                 })
-            })
         }
     }
 
@@ -196,9 +243,13 @@ export default function CreateProduct(props) {
                     <FormControl isRequired>
                         <Heading style={{ alignSelf: "center" }}>Add Product</Heading>
                         <Box style={styles.imageContainer}>
-                            <Image style={styles.image} source={{ uri: mainImage }} />
-                            <TouchableOpacity  style={styles.imagePicker}>
-                                <Icon onPress={pickImage} name="camera" color="white" />
+                            {!uploading ?
+                                <><Image  source={{ uri: photo }} alt="Product Image" style={styles.image}></Image></> :
+                                <><Text>{uploadingMessage}</Text></>
+                            }
+                            
+                            <TouchableOpacity style={styles.imagePicker} onPress={selectPhotoTapped}>
+                                <Icon  name="camera" color="white" />
                             </TouchableOpacity>
                         </Box>
                         <Box flexDirection="column">
@@ -398,7 +449,7 @@ export default function CreateProduct(props) {
                                 value={product.location}
                             />
                         </Box>
-                        {err  ? <Error style={{ paddingBottom: 10 }} message={err} /> : null}
+                        {err ? <Error style={{ paddingBottom: 10 }} message={err} /> : null}
                         <Box style={{ marginVertical: 5 }}>
                             <Button onPress={handleSubmit}>Add Products</Button>
                         </Box>

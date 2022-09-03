@@ -27,6 +27,7 @@
     "react-native": "0.69.4",
     "react-native-gesture-handler": "^2.5.0",
     "react-native-header-search-bar": "^0.1.10",
+    "react-native-image-picker": "^4.10.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-pager-view": "^5.4.25",
     "react-native-paper": "^5.0.0-rc.4",

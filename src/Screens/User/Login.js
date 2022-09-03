@@ -6,6 +6,9 @@ import FormContainer from '../../Shared/Form/FormContainer';
 import Input from '../../Shared/Form/Input';
 import Error from "../../Shared/Error"
 
+//Toast
+import Toast from 'react-native-toast-message'
+
 //context
 import AuthGlobal from "../../Context/store/AuthGlobal"
 import { loginUser } from "../../Context/actions/Auth.actions"
@@ -34,6 +37,7 @@ const Login = (props) => {
             setError("Please fill in your credential")
         } else {
             loginUser(user, context.dispatch)
+
         }
         console.log('user', user)
         setEmail('')   //ECTT(extra code than tutor)

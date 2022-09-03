@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{ useContext } from 'react'
 import { View } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Icon from "react-native-vector-icons/FontAwesome"
@@ -10,11 +10,13 @@ import UserNavigator from "./UserNavigator"
 import CreateProductNavigator from './CreateProductNavigator'
 
 import CartIcon from "../Shared/CardIcon"
+//Context Api
+import AuthGlobal from "../Context/store/AuthGlobal"
 
 const Tab = createBottomTabNavigator();
 
 const Main = () => {
-
+    const context = useContext(AuthGlobal)
     return (
         <Tab.Navigator
             initialRouteName='Home'
@@ -61,6 +63,8 @@ const Main = () => {
                     headerShown: false,
                 }}
             />
+            {context.stateUser.isAuthenticated === true &&
+            <>
             <Tab.Screen
                 name="Add"
                 component={CreateProductNavigator}
@@ -80,8 +84,8 @@ const Main = () => {
                     headerShown: false,
                 }}
             />
-
-
+            </>
+            }
             <Tab.Screen
                 name="User"
                 component={UserNavigator}

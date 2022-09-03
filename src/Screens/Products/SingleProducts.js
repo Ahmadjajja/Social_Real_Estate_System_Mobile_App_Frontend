@@ -1,5 +1,5 @@
 import { Image, View, StyleSheet, Text, ScrollView, Button, Dimensions } from 'react-native'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 
 import { Left, Right, Container, Heading, HStack } from "native-base"
 import Toast from 'react-native-toast-message'
@@ -13,9 +13,13 @@ import { connect } from 'react-redux'
 import * as actions from '../../Redux/Actions/cartActions'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 
+//Context API
+import AuthGlobal from "../../Context/store/AuthGlobal"
+
 var { width, height } = Dimensions.get("window")
 
 const SingleProducts = (props) => {
+    const context = useContext(AuthGlobal)
     const [item, setItem] = useState(props.route.params.item);
     // const [availability, setAvailability] = useState('');
     console.log("from single product", props.route.params.item)
@@ -73,8 +77,8 @@ const SingleProducts = (props) => {
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <View style={[styles.Box, { flexDirection: 'row', width: width / 2.1, justifyContent: 'space-between' }]} >
-                            <Text>Badrooms</Text>
-                            <Text>{item.noOfBadrooms}</Text>
+                            <Text>Bedrooms</Text>
+                            <Text>{item.noOfBedrooms}</Text>
                         </View>
                         <View style={[styles.Box, { flexDirection: 'row', width: width / 2.1, justifyContent: 'space-between' }]} >
                             <Text>Living Rooms</Text>
@@ -84,7 +88,7 @@ const SingleProducts = (props) => {
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <View style={[styles.Box, { flexDirection: 'row', width: width / 2.1, justifyContent: 'space-between' }]} >
                             <Text>Bathrooms</Text>
-                            <Text>{item.noOfBathroom}</Text>
+                            <Text>{item.noOfBathrooms}</Text>
                         </View>
                         <View style={[styles.Box, { flexDirection: 'row', width: width / 2.1, justifyContent: 'space-between' }]} >
                             <Text>Reception</Text>
@@ -140,6 +144,23 @@ const SingleProducts = (props) => {
                 <Button
                     style={styles.AddButton}
                     title='Contact'
+                    onPress={() => {
+                        {
+                            context.stateUser.isAuthenticated === false ? <>
+                                {
+                                    Toast.show({
+                                        topOffset: 60,
+                                        type: "success",
+                                        text1: "Please login into your account to contact",
+                                        text2: ""
+                                    })
+                                    // props.navigation.navigate('Login')
+                                }
+                            </>
+                                :
+                                null
+                        }
+                    }}
                 />
             </HStack>
 

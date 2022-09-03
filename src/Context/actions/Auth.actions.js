@@ -22,6 +22,12 @@ export const loginUser = (user, dispatch) => {
                 AsyncStorage.setItem("jwt", token)
                 const decoded = jwt_decode(token)
                 dispatch(setCurrentUser(decoded, user)) 
+                Toast.show({
+                    topOffset: 60,
+                    type: "success",
+                    text1: "Login Succeeded",
+                    text2: ""
+                })
 
             } else { 
                 logoutUser(dispatch)

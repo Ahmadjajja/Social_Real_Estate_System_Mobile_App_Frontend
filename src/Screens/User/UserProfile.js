@@ -1,6 +1,6 @@
 import React, { useContext, useCallback, useState, useEffect } from 'react';
-import { View, Text, ScrollView, StyleSheet, Button } from 'react-native';
-import { Box, Heading } from 'native-base';
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { Box, Heading, Button } from 'native-base';
 import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-community/async-storage';
 
@@ -26,12 +26,12 @@ const UserProfile = (props) => {
             .then((res) => {
                 console.log("context.stateUser.user.userId=>", context.stateUser.user.userId)
                 axios
-                    .get(`${baseURL}users/${context.stateUser.user.userId }`, //sub is number or the id in this case
+                    .get(`${baseURL}users/${context.stateUser.user.userId}`, //sub is number or the id in this case
                         {
                             headers: { Authorization: `Bearer ${res}` }
                         }
                     )
-                // console.log("token=>", res)
+                    // console.log("token=>", res)
                     .then((user) => {
                         console.log("user.data", user.data)
                         setUserProfile(user.data)
@@ -50,7 +50,7 @@ const UserProfile = (props) => {
         <Box style={styles.container}>
             <ScrollView contentContainerStyle={styles.subContainer}>
                 <Text style={{ fontSize: 30 }}>
-                    userName: 
+                    userName:
                     {userProfile ? userProfile.userName : "User Name"}
                 </Text>
                 <View style={{ marginTop: 20 }}>
@@ -61,15 +61,20 @@ const UserProfile = (props) => {
                         Phone: {userProfile ? userProfile.phone : "something wrong with userProfile"}
                     </Text>
                 </View>
-                <View style={{ marginTop: 80 }}>
-                    <Button
-                        title={"Sign Out"}
-                        onPress={() => {
-                            AsyncStorage.removeItem("jwt"), //what does this line means
-                                logoutUser(context.dispatch)
-                        }}
-                    />
-                </View>
+                {/* <View style={{ marginTop: 80 }}> */}
+                    <View style={styles.buttonGroup}>
+                        <Box width="100%">
+                            <Button
+                                onPress={() => {
+                                    AsyncStorage.removeItem("jwt"), //what does this line means
+                                        logoutUser(context.dispatch)
+                                }}
+                            >
+                                Log Out
+                            </Button>
+                        </Box>
+                    </View>
+                {/* </View> */}
             </ScrollView>
         </Box>
     )
@@ -83,7 +88,11 @@ const styles = StyleSheet.create({
     subContainer: {
         alignItems: "center",
         marginTop: 60,
-    }
+    },
+    buttonGroup: {
+        width: '80%',
+        alignItems: 'center',
+    },
 
 })
 
