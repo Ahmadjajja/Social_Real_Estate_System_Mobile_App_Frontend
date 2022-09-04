@@ -1,7 +1,7 @@
-import { Image, View, StyleSheet, Text, ScrollView, Button, Dimensions } from 'react-native'
+import { Image, View, StyleSheet, Text, ScrollView, Dimensions, TouchableOpacity, Linking, Platform  } from 'react-native'
 import React, { useState, useEffect, useContext } from 'react'
 
-import { Left, Right, Container, Heading, HStack } from "native-base"
+import { Left, Right, Container, Heading, HStack, Button } from "native-base"
 import Toast from 'react-native-toast-message'
 import Icon from "react-native-vector-icons/Ionicons"
 import Feather from "react-native-vector-icons/Feather"
@@ -11,7 +11,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome"
 //  REDUX
 import { connect } from 'react-redux'
 import * as actions from '../../Redux/Actions/cartActions'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+// import { TouchableOpacity } from 'react-native-gesture-handler'
 
 //Context API
 import AuthGlobal from "../../Context/store/AuthGlobal"
@@ -23,6 +23,38 @@ const SingleProducts = (props) => {
     const [item, setItem] = useState(props.route.params.item);
     // const [availability, setAvailability] = useState('');
     console.log("from single product", props.route.params.item)
+
+
+    const showToast = () => {
+        Toast.show({
+            topOffset: 60,
+            type: "",
+            text1: "Please login before to contact with owner",
+            text2: ""
+        })
+        Toast.show({
+            topOffset: 60,
+            type: "error",
+            text1: "Something went wrong",
+            text2: "please try again"
+        })
+    }
+
+    const  dialCall = () => {
+ 
+        let phoneNumber = '';
+
+        console.log("item.ownerPhoneNumber => ", item.ownerPhoneNumber)
+     
+        if (Platform.OS === 'android') {
+          phoneNumber = `tel:${item.ownerPhoneNumber}`;
+        }
+        else {
+          phoneNumber = `telprompt:${item.ownerPhoneNumber}`;
+        }
+     
+        Linking.openURL(phoneNumber);
+      };
 
     return (
         <View style={styles.Container}>
@@ -120,48 +152,36 @@ const SingleProducts = (props) => {
                                 Toast.show({
                                     topOffset: 60,
                                     type: "success",
-                                    text1: `${item.tital} added to Cart`,
-                                    text2: "Go to your cart to complete order  "
+                                    text1: `${item.tital} added to wishlist`,
+                                    text2: "Go to your Wishlist to see your favorite  "
                                 })
                             // console.log("props in Single Product",props.route.params.item)
                         }}
                     />
                 </TouchableOpacity>
-                {/* <Button
-                    style={styles.AddButton}
-                    title='Add'
-                    onPress={() => {
-                        props.addItemToCart(props.route.params.item),
-                            Toast.show({
-                                topOffset: 60,
-                                type: "success",
-                                text1: `${item.tital} added to Cart`,
-                                text2: "Go to your cart to complete order  "
-                            })
-                        // console.log("props in Single Product",props.route.params.item)
-                    }}
-                /> */}
-                <Button
-                    style={styles.AddButton}
-                    title='Contact'
-                    onPress={() => {
-                        {
-                            context.stateUser.isAuthenticated === false ? <>
-                                {
-                                    Toast.show({
-                                        topOffset: 60,
-                                        type: "success",
-                                        text1: "Please login into your account to contact",
-                                        text2: ""
-                                    })
-                                    // props.navigation.navigate('Login')
-                                }
-                            </>
-                                :
-                                null
-                        }
-                    }}
-                />
+                {context.stateUser.isAuthenticated === true ?
+                                <TouchableOpacity
+                                    style={styles.AddButton}
+                                    onPress={() => dialCall()} 
+                                >
+                                    <Feather size={30} color="green" name="phone-call"/>
+                                </TouchableOpacity> :
+                                <TouchableOpacity
+                                    style={styles.AddButton}
+                                    onPress={() => {
+                                        Toast.show({
+                                            topOffset: 60,
+                                            type: "success",
+                                            text1: "Please login first to contact with owner!",
+                                            text2: ""
+                                        })
+                                    }
+                                    } 
+                                >
+                                    <Feather size={30} color="green" name="phone-call"/>
+                                </TouchableOpacity>
+                }
+
             </HStack>
 
             {/* </View> */}
@@ -230,7 +250,8 @@ const styles = StyleSheet.create({
         color: 'red',
     }, AddButton: {
         // marginRight: 10
-        backgroundColor: "green"
+        backgroundColor: "white",
+        borderRadius: 30,
     }
     // availabilityContainer: {
     //     marginBottom: 20,

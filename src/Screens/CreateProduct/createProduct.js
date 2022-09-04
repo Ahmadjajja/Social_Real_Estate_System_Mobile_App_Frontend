@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Box, Input, NativeBaseProvider, Image, Text, VStack, Select, CheckIcon, Button, FormControl, Stack, ScrollView, TextArea, Center, Heading } from 'native-base';
 import { TouchableOpacity, FlatList, View, Dimensions, StyleSheet, Platform, TextInput,Alert } from 'react-native';
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -13,8 +13,16 @@ import { launchImageLibrary } from 'react-native-image-picker';
 var { width } = Dimensions.get("window")
 import Toast from 'react-native-toast-message'
 
+//
+// context
+import { ProductContext } from '../../Context/store/productGlobal.js';
+import AuthGlobal from "../../Context/store/AuthGlobal"
+
 
 export default function CreateProduct(props) {
+
+    const { isLoader, setIsLoader, productsGlobal, setProductsGlobal, categoriesGlobal, setCategoriesGlobal } = useContext(ProductContext);
+    const context = useContext(AuthGlobal)
 
     const [categories, setCategories] = useState([])
     const [photo, setPhoto] = useState('');
@@ -28,6 +36,8 @@ export default function CreateProduct(props) {
     const [reception, setReception] = useState()
     const [category, setCategory] = useState()
     const [categoryId, setCategoryId] = useState('')
+    const [userData, setUserData] = useState('')
+    const [ownerPhoneNumber, setOwnerPhoneNumber] = useState('')
 
     const [product, setProduct] = useState({
         tital: "",
@@ -43,10 +53,21 @@ export default function CreateProduct(props) {
 
     useEffect(() => {
 
-
         AsyncStorage.getItem("jwt") //token comes from asyncStorage
             .then((res) => {
                 setToken(res)
+                axios
+                .get(`${baseURL}users/${context.stateUser.user.userId}`, //sub is number or the id in this case
+                    {
+                        headers: { Authorization: `Bearer ${res}` }
+                    }
+                )
+                // console.log("token=>", res)
+                .then((user) => {
+                    console.log("user.data =>", user.data.phone)
+                    setUserData(user.data)
+                    setOwnerPhoneNumber(user.data.phone)
+                })
             })
             .catch((error) => console.log(error));
 
@@ -65,6 +86,15 @@ export default function CreateProduct(props) {
 
         return () => {
             setCategories([])
+            setProduct({})
+            setFininshType('')
+            setCategory('')
+            setImage('')
+            setPhoto('')
+            setOwnerPhoneNumber('')
+            setReception('')
+            setCategoryId('')
+
         }
     }, [])
 
@@ -140,6 +170,7 @@ export default function CreateProduct(props) {
     }
 
     const handleSubmit = async () => {
+        console.log("ownerPhoneNumber", ownerPhoneNumber)
 
         if (
             product.tital == "" ||
@@ -151,7 +182,7 @@ export default function CreateProduct(props) {
             product.area == 0 ||
             product.diningRooms == 0 ||
             product.kitchen == 0 ||
-            image == '123' ||
+            photo == '' ||
             category == '' ||
             reception == undefined ||
             finishType == ''
@@ -189,13 +220,13 @@ export default function CreateProduct(props) {
                 area: Number(product.area),
                 diningRooms: Number(product.diningRooms),
                 kitchen: Number(product.kitchen),
+                ownerPhoneNumber: ownerPhoneNumber,
             }
 
             console.log("productData  =>", productData);
 
             const config = {
                 headers: {
-                    "Content-Type": "multipart/form-Data",
                     Authorization: `Bearer ${token}`
                 }
             }
@@ -212,8 +243,10 @@ export default function CreateProduct(props) {
                             text1: "New Product added",
                             text2: ""
                         })
+
+                        
                         setTimeout(() => {
-                            props.navigation.navigate("Products");
+                            props.navigation.navigate("home");
                         }, 500)
                     }
                 })
