@@ -86,14 +86,14 @@ export default function CreateProduct(props) {
 
         return () => {
             setCategories([])
-            setProduct({})
-            setFininshType('')
-            setCategory('')
-            setImage('')
-            setPhoto('')
-            setOwnerPhoneNumber('')
-            setReception('')
-            setCategoryId('')
+            // setProduct({})
+            // setFininshType('')
+            // setCategory('')
+            // setImage('')
+            // setPhoto('')
+            // setOwnerPhoneNumber('')
+            // setReception('')
+            // setCategoryId('')
 
         }
     }, [])
@@ -244,7 +244,15 @@ export default function CreateProduct(props) {
                             text2: ""
                         })
 
-                        
+                                                
+                        //logic for rendering added product at homepage without refreshing here
+                        productData.id = Date.now() + Date.now()
+                        productData._id = productData.id
+
+                        console.log("productData after adding id and _id", productData)
+                        setProductsGlobal(productsGlobal.concat(productData))
+                        console.log("products global + product Data", productsGlobal.concat(productData))
+
                         setTimeout(() => {
                             props.navigation.navigate("home");
                         }, 500)
