@@ -2,8 +2,11 @@ import React from 'react'
 import { View, Text, StyleSheet, Dimensions, Image} from 'react-native';
 import Toast from 'react-native-toast-message'
 
+
+//  REDUX
 import { connect } from 'react-redux'
 import * as actions from '../../Redux/Actions/cartActions'
+// import AuthGlobal from "../../Context/store/AuthGlobal"
 
 import Icon from "react-native-vector-icons/FontAwesome"
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -12,6 +15,10 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 var { width } = Dimensions.get("window")
 
 const ProductCard = (props) => {
+
+
+    console.log("props.cartItems", props.cartItems)
+    
     const { tital, price, image } = props;
     console.log(props)
     return (
@@ -60,6 +67,14 @@ const ProductCard = (props) => {
     )
 }
 
+
+const mapStateToProps = (state) => {
+    // console.log("state that coming from redux", state)
+    const { CartItems } = state;  //this state we are getting from REDUX to use in this component
+    return {
+      cartItems: CartItems, //this variable will assign to props
+    }
+  }
 const mapDispatchToProps = (dispatch) => {
     return {
         addItemToCart: (product) =>

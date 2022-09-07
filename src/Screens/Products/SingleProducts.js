@@ -1,4 +1,4 @@
-import { Image, View, StyleSheet, Text, ScrollView, Dimensions, TouchableOpacity, Linking, Platform  } from 'react-native'
+import { Image, View, StyleSheet, Text, ScrollView, Dimensions, TouchableOpacity, Linking, Platform } from 'react-native'
 import React, { useState, useEffect, useContext } from 'react'
 
 import { Left, Right, Container, Heading, HStack, Button } from "native-base"
@@ -6,7 +6,12 @@ import Toast from 'react-native-toast-message'
 import Icon from "react-native-vector-icons/Ionicons"
 import Feather from "react-native-vector-icons/Feather"
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons"
+import AntDesign from "react-native-vector-icons/AntDesign"
 import FontAwesome from "react-native-vector-icons/FontAwesome"
+import baseURL from "../../assets/common/baseUrl";
+import axios from 'axios';
+import AsyncStorage from "@react-native-community/async-storage";
+
 
 //  REDUX
 import { connect } from 'react-redux'
@@ -21,40 +26,80 @@ var { width, height } = Dimensions.get("window")
 const SingleProducts = (props) => {
     const context = useContext(AuthGlobal)
     const [item, setItem] = useState(props.route.params.item);
+    const [userPhoneNumber, setUserPhoneNumber] = useState('')
     // const [availability, setAvailability] = useState('');
     console.log("from single product", props.route.params.item)
 
 
-    const showToast = () => {
-        Toast.show({
-            topOffset: 60,
-            type: "",
-            text1: "Please login before to contact with owner",
-            text2: ""
-        })
-        Toast.show({
-            topOffset: 60,
-            type: "error",
-            text1: "Something went wrong",
-            text2: "please try again"
-        })
-    }
+    // const showToast = () => {
+    //     Toast.show({
+    //         topOffset: 60,
+    //         type: "",
+    //         text1: "Please login before to contact with owner",
+    //         text2: ""
+    //     })
+    //     Toast.show({
+    //         topOffset: 60,
+    //         type: "error",
+    //         text1: "Something went wrong",
+    //         text2: "please try again"
+    //     })
+    // }
 
-    const  dialCall = () => {
- 
+    const dialCall = () => {
+
         let phoneNumber = '';
 
         console.log("item.ownerPhoneNumber => ", item.ownerPhoneNumber)
-     
+
         if (Platform.OS === 'android') {
-          phoneNumber = `tel:${item.ownerPhoneNumber}`;
+            phoneNumber = `tel:${item.ownerPhoneNumber}`;
         }
         else {
-          phoneNumber = `telprompt:${item.ownerPhoneNumber}`;
+            phoneNumber = `telprompt:${item.ownerPhoneNumber}`;
         }
-     
+
         Linking.openURL(phoneNumber);
-      };
+    };
+
+
+
+    //useEffect for getting user data
+    useEffect(() => {
+        console.log("useEffect started")
+        AsyncStorage.getItem("jwt") //token comes from asyncStorage
+            .then((res) => {
+                // setToken(res)
+                axios
+                    .get(`${baseURL}users/${context.stateUser.user.userId}`, //sub is number or the id in this case
+                        {
+                            headers: { Authorization: `Bearer ${res}` }
+                        }
+                    )
+                    // console.log("token=>", res)
+                    .then((user) => {
+                        console.log("user.data.phone from single product =>", user.data.phone)
+                        setUserPhoneNumber(user.data.phone)
+                        // setOwnerPhoneNumber(user.data.phone)
+                    })
+            })
+            .catch((error) => console.log("error", error));
+
+        return () => {
+
+        }
+    }, [])
+
+    const Delete = () => {
+        console.log("delete working")
+    }
+    const Update = () => {
+        console.log("Update working")
+
+    }
+
+    // console.log("userPhoneNumber", userPhoneNumber)
+    // console.log("item.ownerPhoneNumber", item.ownerPhoneNumber)
 
     return (
         <View style={styles.Container}>
@@ -141,46 +186,72 @@ const SingleProducts = (props) => {
             </ScrollView>
             {/* <View > */}
             <HStack style={styles.bottomContainer}>
-                <TouchableOpacity>
-                    <FontAwesome
-                        name='heart-o'
-                        style={{ position: 'relative' }}
-                        color={"green"}
-                        size={30}
-                        onPress={() => {
-                            props.addItemToCart(props.route.params.item),
-                                Toast.show({
-                                    topOffset: 60,
-                                    type: "success",
-                                    text1: `${item.tital} added to wishlist`,
-                                    text2: "Go to your Wishlist to see your favorite  "
-                                })
-                            // console.log("props in Single Product",props.route.params.item)
-                        }}
-                    />
-                </TouchableOpacity>
-                {context.stateUser.isAuthenticated === true ?
-                                <TouchableOpacity
-                                    style={styles.AddButton}
-                                    onPress={() => dialCall()} 
-                                >
-                                    <Feather size={30} color="green" name="phone-call"/>
-                                </TouchableOpacity> :
-                                <TouchableOpacity
-                                    style={styles.AddButton}
-                                    onPress={() => {
-                                        Toast.show({
-                                            topOffset: 60,
-                                            type: "success",
-                                            text1: "Please login first to contact with owner!",
-                                            text2: ""
-                                        })
-                                    }
-                                    } 
-                                >
-                                    <Feather size={30} color="green" name="phone-call"/>
-                                </TouchableOpacity>
+                {userPhoneNumber === item.ownerPhoneNumber ?
+                    <TouchableOpacity onPress={() => Delete()}>
+                        <AntDesign
+                            name='delete'
+                            style={{ position: 'relative' }}
+                            color={"red"}
+                            size={30}
+                        />
+                    </TouchableOpacity>
+                    :
+                    <TouchableOpacity>
+                        <FontAwesome
+                            name='heart-o'
+                            style={{ position: 'relative' }}
+                            color={"green"}
+                            size={30}
+                            onPress={() => {
+                                props.addItemToCart(props.route.params.item),
+                                    Toast.show({
+                                        topOffset: 60,
+                                        type: "success",
+                                        text1: `${item.tital} added to wishlist`,
+                                        text2: "Go to your Wishlist to see your favorite  "
+                                    })
+                            }}
+                        />
+                    </TouchableOpacity>
                 }
+
+                {userPhoneNumber === item.ownerPhoneNumber ?
+                    <>
+                        <TouchableOpacity
+                            style={styles.AddButton}
+                            onPress={() => Update()}
+                        >
+                            <MaterialCommunityIcons size={30} color="green" name="update" />
+                        </TouchableOpacity>
+                    </> :
+                    <>
+                        {context.stateUser.isAuthenticated === true ?
+
+                            <TouchableOpacity
+                                style={styles.AddButton}
+                                onPress={() => dialCall()}
+                            >
+                                <Feather size={30} color="green" name="phone-call" />
+                            </TouchableOpacity> :
+                            <TouchableOpacity
+                                style={styles.AddButton}
+                                onPress={() => {
+                                    Toast.show({
+                                        topOffset: 60,
+                                        type: "success",
+                                        text1: "Please login first to contact with owner!",
+                                        text2: ""
+                                    })
+                                }
+                                }
+                            >
+                                <Feather size={30} color="green" name="phone-call" />
+                            </TouchableOpacity>
+                        }
+                    </>
+
+                }
+
 
             </HStack>
 

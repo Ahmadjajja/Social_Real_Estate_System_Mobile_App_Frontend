@@ -16,7 +16,7 @@ const CartItem = (props) => {
     }}
     >
       <VStack
-        space={3}
+        space={3} 
         divider={<Divider />}
         style={styles.listItem}
         // w="90%"

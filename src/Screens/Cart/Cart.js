@@ -14,10 +14,13 @@ import AuthGlobal from "../../Context/store/AuthGlobal"
 
 var { height, width } = Dimensions.get('window')
 
-const Cart = (props) => {
+const Cart = (props) => { 
 
   const context = useContext(AuthGlobal)
-
+  
+  
+  console.log("props from Cart ",props)
+  
   var total = 0;
   props.cartItems.forEach(cart => {
     return (total += cart.product.price)
@@ -31,7 +34,9 @@ const Cart = (props) => {
             Wishlist
           </Text>
           {/* <ScrollView> */}
-          {console.log("data from Cart.js => ", props.cartItems)}
+          {
+          console.log("data from Cart.js => ", props.cartItems)
+          }
           <SwipeListView
             data={props.cartItems}
             renderItem={(data, rowMap) => {
