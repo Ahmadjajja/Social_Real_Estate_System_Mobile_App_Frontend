@@ -98,36 +98,28 @@ const ProductContainer = (props) => {
     {
       ctg === 'All'
         ?
-        [setProductsCtg(initialState), setActive(true),setAllActive(true)]
+        [setProductsCtg(initialState), setActive(true), setAllActive(true)]
         : [
-          ctg === 'myPosts' 
-          ?
-          setProductsCtg(
-            products.filter((i) => {
-              console.log("i.category", i.category);
-              console.log("i.category._id", i.category._id);
-              console.log("ctg", ctg);
-              // return i.category._id === ctg
-            }), //here may be error
-            setActive(true),
-            setAllActive(true),
-          )
-          :
-          setProductsCtg(
-            products.filter((i) => {
-              console.log("myPosts code is not working correctly")
-              console.log("i.category", i.category);
-              console.log("i.category._id", i.category._id);
-              console.log("ctg", ctg);
-              return i.category._id === ctg
-            }), //here may be error
-            setActive(true),
-            setAllActive(true),
-          )
+          ctg === 'myPosts'
+            ?
+            (console.log("myPosts "),
+              setActive(true),
+              setAllActive(false))
+            :
+            setProductsCtg(
+              products.filter((i) => {
+                console.log("myPosts code is not working correctly")
+                console.log("i.category", i.category);
+                console.log("i.category._id", i.category._id);
+                console.log("ctg", ctg);
+                return i.category._id === ctg
+              }), //here may be error
+              setActive(true),
+              setAllActive(false),
+            )
         ]
     }
   }
-
   return (
     <>
       {
@@ -210,7 +202,7 @@ const ProductContainer = (props) => {
                     ) :
                     (
                       <>
-                        <Box style={ { backgroundColor: '#f2f2f2', flex: 1, paddingTop: 150}}>
+                        <Box style={{ backgroundColor: '#f2f2f2', flex: 1, paddingTop: 150 }}>
                           <ActivityIndicator size="large" color="red" />
                         </Box>
                       </>
