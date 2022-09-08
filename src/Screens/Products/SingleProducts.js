@@ -11,7 +11,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome"
 import baseURL from "../../assets/common/baseUrl";
 import axios from 'axios';
 import AsyncStorage from "@react-native-community/async-storage";
-
+ 
 
 //  REDUX
 import { connect } from 'react-redux'
@@ -20,13 +20,17 @@ import * as actions from '../../Redux/Actions/cartActions'
 
 //Context API
 import AuthGlobal from "../../Context/store/AuthGlobal"
+import { ProductContext } from '../../Context/store/productGlobal.js';
 
 var { width, height } = Dimensions.get("window")
 
 const SingleProducts = (props) => {
     const context = useContext(AuthGlobal)
+    const { userPhoneNumber } = useContext(ProductContext)
+
     const [item, setItem] = useState(props.route.params.item);
-    const [userPhoneNumber, setUserPhoneNumber] = useState('')
+    console.log("userPhoneNumber in singleProduct", userPhoneNumber)
+    // const [userPhoneNumber, setUserPhoneNumber] = useState('')
     // const [availability, setAvailability] = useState('');
     console.log("from single product", props.route.params.item)
 
@@ -64,31 +68,31 @@ const SingleProducts = (props) => {
 
 
 
-    //useEffect for getting user data
-    useEffect(() => {
-        console.log("useEffect started")
-        AsyncStorage.getItem("jwt") //token comes from asyncStorage
-            .then((res) => {
-                // setToken(res)
-                axios
-                    .get(`${baseURL}users/${context.stateUser.user.userId}`, //sub is number or the id in this case
-                        {
-                            headers: { Authorization: `Bearer ${res}` }
-                        }
-                    )
-                    // console.log("token=>", res)
-                    .then((user) => {
-                        console.log("user.data.phone from single product =>", user.data.phone)
-                        setUserPhoneNumber(user.data.phone)
-                        // setOwnerPhoneNumber(user.data.phone)
-                    })
-            })
-            .catch((error) => console.log("error", error));
+    // //useEffect for getting user data 
+    // useEffect(() => {
+    //     console.log("useEffect started")
+    //     AsyncStorage.getItem("jwt") //token comes from asyncStorage
+    //         .then((res) => {
+    //             // setToken(res)
+    //             axios
+    //                 .get(`${baseURL}users/${context.stateUser.user.userId}`, //sub is number or the id in this case
+    //                     {
+    //                         headers: { Authorization: `Bearer ${res}` }
+    //                     }
+    //                 )
+    //                 // console.log("token=>", res)
+    //                 .then((user) => {
+    //                     console.log("user.data.phone from single product =>", user.data.phone)
+    //                     setUserPhoneNumber(user.data.phone)
+    //                     // setOwnerPhoneNumber(user.data.phone)
+    //                 })
+    //         })
+    //         .catch((error) => console.log("error", error));
 
-        return () => {
+    //     return () => {
 
-        }
-    }, [])
+    //     }
+    // }, [])
 
     const Delete = () => {
         console.log("delete working")

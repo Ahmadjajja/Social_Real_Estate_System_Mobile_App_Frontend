@@ -26,6 +26,7 @@ const ProductContainer = (props) => {
   const [categories, setCategories] = useState([]);
   const [productsCtg, setProductsCtg] = useState([])
   const [active, setActive] = useState()
+  const [allActive, setAllActive] = useState()
   const [initialState, setInitialState] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -52,6 +53,8 @@ const ProductContainer = (props) => {
 
     //Categories
     setCategories(categoriesGlobal)
+
+
     // console.log("categoriesGlobal in ")
 
 
@@ -93,14 +96,34 @@ const ProductContainer = (props) => {
   //Categories
   const changeCtg = (ctg) => {
     {
-      ctg === 'all'
+      ctg === 'All'
         ?
-        [setProductsCtg(initialState), setActive(true)]
+        [setProductsCtg(initialState), setActive(true),setAllActive(true)]
         : [
+          ctg === 'myPosts' 
+          ?
           setProductsCtg(
-            products.filter((i) => i.category._id === ctg), //here may be error
-            setActive(true)
-          ),
+            products.filter((i) => {
+              console.log("i.category", i.category);
+              console.log("i.category._id", i.category._id);
+              console.log("ctg", ctg);
+              // return i.category._id === ctg
+            }), //here may be error
+            setActive(true),
+            setAllActive(true),
+          )
+          :
+          setProductsCtg(
+            products.filter((i) => {
+              console.log("myPosts code is not working correctly")
+              console.log("i.category", i.category);
+              console.log("i.category._id", i.category._id);
+              console.log("ctg", ctg);
+              return i.category._id === ctg
+            }), //here may be error
+            setActive(true),
+            setAllActive(true),
+          )
         ]
     }
   }
@@ -151,11 +174,13 @@ const ProductContainer = (props) => {
                       <>
                         <View>
                           <CategoryFilter
-                            categories={categories}
+                            categories={categories} // these are props
                             CategoryFilter={changeCtg}
                             productsCtg={productsCtg}
                             active={active}
                             setActive={setActive}
+                            allActive={allActive}
+                            setAllActive={setAllActive}
                           />
                         </View>
 

@@ -13,7 +13,7 @@ const CategoryFilter = (props) => {
                 <TouchableOpacity
                     key={1}
                     onPress={() => {
-                        props.CategoryFilter('all'), props.setActive(-1)
+                        props.CategoryFilter('All'), props.setActive(-1)
                     }}
                 >
                     <Badge style={[styles.center, { margin: 5, borderRadius: 30 },
@@ -21,7 +21,22 @@ const CategoryFilter = (props) => {
                     ]}
                     >
                         <Text style={{ color: 'white' }}>
-                            all
+                            All
+                        </Text>
+                    </Badge>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    key={1}
+                    onPress={() => {
+                        props.CategoryFilter('myPosts'), props.setAllActive(-1)
+                    }}
+                >
+                    <Badge style={[styles.center, { margin: 5, borderRadius: 30 },
+                    props.allActive == -1 ? styles.allActive : styles.allInActive
+                    ]}
+                    >
+                        <Text style={{ color: 'white' }}>
+                            My Posts
                         </Text>
                     </Badge>
                 </TouchableOpacity>
@@ -63,7 +78,9 @@ const CategoryFilter = (props) => {
                                 key={item._id.$oid}
                                 onPress={() => {
                                     props.CategoryFilter(item._id),
-                                        props.setActive(props.categories.indexOf(item))
+                                        props.setActive(props.categories.indexOf(item)),
+                                        console.log("item._id", item._id),
+                                        console.log("props.categories.indexOf(item)", props.categories.indexOf(item))
                                 }}
                             >
                                 <Box>
@@ -95,9 +112,15 @@ const styles = StyleSheet.create({
     center: {
         justifyContent: 'center',
         alignItems: 'center'
-    }, active: {
+    }
+    , active: {
         backgroundColor: "#03bafc"
     }, inactive: {
+        backgroundColor: "#a0e1eb"
+    }
+    , allActive: {
+        backgroundColor: "#03bafc"
+    }, allInActive: {
         backgroundColor: "#a0e1eb"
     }
 })

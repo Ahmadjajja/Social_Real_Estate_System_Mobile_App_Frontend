@@ -6,14 +6,17 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import axios from 'axios'
 import baseURL from "../../assets/common/baseUrl"
-
+//Context API
 import AuthGlobal from '../../Context/store/AuthGlobal';
 import { logoutUser } from "../../Context/actions/Auth.actions"
+import { ProductContext } from '../../Context/store/productGlobal.js';
 
 
 
 const UserProfile = (props) => {
     const context = useContext(AuthGlobal)
+    const { setUserPhoneNumber } = useContext(ProductContext)
+
     const [userProfile, setUserProfile] = useState()
 
     useEffect(() => {
@@ -34,7 +37,8 @@ const UserProfile = (props) => {
                     // console.log("token=>", res)
                     .then((user) => {
                         console.log("user.data", user.data)
-                        setUserProfile(user.data)
+                        setUserPhoneNumber(user.data.phone)
+                        setUserProfile(user.data) 
                     })
             })
             .catch((error) => console.log(error))
