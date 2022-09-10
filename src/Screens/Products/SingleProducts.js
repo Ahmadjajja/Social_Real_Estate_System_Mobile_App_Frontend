@@ -89,8 +89,7 @@ const SingleProducts = (props) => {
             .catch((error) => console.log("error", error));
     }
     const Update = () => {
-        console.log("Update working")
-
+        props.navigation.navigate('Add', {item: item})
     }
 
     // console.log("userPhoneNumber", userPhoneNumber)

@@ -53,6 +53,12 @@ export default function CreateProduct(props) {
 
     useEffect(() => {
 
+        // if(props.route.params){
+        //     console.log("props.route.params.item working=> ", props.route.params)
+        // } else {
+        //     console.log("props.route.params.item not working=> ")
+        // }
+
         AsyncStorage.getItem("jwt") //token comes from asyncStorage
             .then((res) => {
                 setToken(res)
@@ -64,7 +70,7 @@ export default function CreateProduct(props) {
                 )
                 // console.log("token=>", res)
                 .then((user) => {
-                    console.log("user.data =>", user.data.phone)
+                    // console.log("user.data.phone =>", user.data.phone)
                     setUserData(user.data)
                     setOwnerPhoneNumber(user.data.phone)
                 })
