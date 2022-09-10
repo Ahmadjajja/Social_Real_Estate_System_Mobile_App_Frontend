@@ -21,7 +21,7 @@ import AuthGlobal from "../../Context/store/AuthGlobal"
 
 export default function CreateProduct(props) {
 
-    const { isLoader, setIsLoader, productsGlobal, setProductsGlobal, categoriesGlobal, setCategoriesGlobal } = useContext(ProductContext);
+    const {  productsGlobal, setProductsGlobal,  productDataToUpdate , setProductDataToUpdate} = useContext(ProductContext);
     const context = useContext(AuthGlobal)
 
     const [categories, setCategories] = useState([])
@@ -32,12 +32,13 @@ export default function CreateProduct(props) {
     const [uploading, setUploading] = useState(false)
     const [uploadingMessage, setUploadingMessage] = useState("Uploading Image...")
 
-    const [finishType, setFininshType] = useState('');
+    const [finishType, setFinishType] = useState('');
     const [reception, setReception] = useState()
     const [category, setCategory] = useState()
     const [categoryId, setCategoryId] = useState('')
     const [userData, setUserData] = useState('')
     const [ownerPhoneNumber, setOwnerPhoneNumber] = useState('')
+    // const []
 
     const [product, setProduct] = useState({
         tital: "",
@@ -53,13 +54,30 @@ export default function CreateProduct(props) {
 
     useEffect(() => {
 
-        // if(props.route.params){
-        //     console.log("props.route.params.item working=> ", props.route.params)
-        // } else {
-        //     console.log("props.route.params.item not working=> ")
-        // }
+        if(productDataToUpdate != ''){
+            console.log("productDataToUpdate in createProduct", productDataToUpdate)
+            setProduct({
+                tital: "",
+                location: "",
+                noOfBedrooms: 0,
+                noOfBathrooms: 0,
+                livingRooms: 0,
+                price: 0,
+                area: 0,
+                diningRooms: 0,
+                kitchen: 0
+            })
+            setOwnerPhoneNumber()
+            setPhoto()
+            setFinishType()
+            setCategory()
+            setReception()
 
-        AsyncStorage.getItem("jwt") //token comes from asyncStorage
+        }
+
+        // console.log("productDataToUpdate",productDataToUpdate)
+
+        AsyncStorage.getItem("jwt") //token comes from asyncStorage  
             .then((res) => {
                 setToken(res)
                 axios
@@ -93,13 +111,14 @@ export default function CreateProduct(props) {
         return () => {
             setCategories([])
             // setProduct({})
-            // setFininshType('')
+            // setFinishType('')
             // setCategory('')
             // setImage('')
             // setPhoto('')
             // setOwnerPhoneNumber('')
             // setReception('')
             // setCategoryId('')
+            setProductDataToUpdate({})
 
         }
     }, [])
@@ -326,7 +345,7 @@ export default function CreateProduct(props) {
                                     }} _dark={{
                                         bg: 'coolGray.800'
                                     }}
-                                    onValueChange={itemValue => setFininshType(itemValue)}
+                                    onValueChange={itemValue => setFinishType(itemValue)}
                                 // onChangeText={(value) => handleChange("finishType", value)}
                                 // value={product.finishType}
                                 >
