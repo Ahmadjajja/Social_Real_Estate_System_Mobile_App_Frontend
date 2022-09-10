@@ -11,7 +11,7 @@ import FontAwesome from "react-native-vector-icons/FontAwesome"
 import baseURL from "../../assets/common/baseUrl";
 import axios from 'axios';
 import AsyncStorage from "@react-native-community/async-storage";
- 
+
 
 //  REDUX
 import { connect } from 'react-redux'
@@ -26,29 +26,12 @@ var { width, height } = Dimensions.get("window")
 
 const SingleProducts = (props) => {
     const context = useContext(AuthGlobal)
-    const { userPhoneNumber } = useContext(ProductContext)
+    const { userPhoneNumber, productsGlobal, setProductsGlobal } = useContext(ProductContext)
 
     const [item, setItem] = useState(props.route.params.item);
     console.log("userPhoneNumber in singleProduct", userPhoneNumber)
-    // const [userPhoneNumber, setUserPhoneNumber] = useState('')
-    // const [availability, setAvailability] = useState('');
     console.log("from single product", props.route.params.item)
 
-
-    // const showToast = () => {
-    //     Toast.show({
-    //         topOffset: 60,
-    //         type: "",
-    //         text1: "Please login before to contact with owner",
-    //         text2: ""
-    //     })
-    //     Toast.show({
-    //         topOffset: 60,
-    //         type: "error",
-    //         text1: "Something went wrong",
-    //         text2: "please try again"
-    //     })
-    // }
 
     const dialCall = () => {
 
@@ -67,35 +50,43 @@ const SingleProducts = (props) => {
     };
 
 
-
-    // //useEffect for getting user data 
-    // useEffect(() => {
-    //     console.log("useEffect started")
-    //     AsyncStorage.getItem("jwt") //token comes from asyncStorage
-    //         .then((res) => {
-    //             // setToken(res)
-    //             axios
-    //                 .get(`${baseURL}users/${context.stateUser.user.userId}`, //sub is number or the id in this case
-    //                     {
-    //                         headers: { Authorization: `Bearer ${res}` }
-    //                     }
-    //                 )
-    //                 // console.log("token=>", res)
-    //                 .then((user) => {
-    //                     console.log("user.data.phone from single product =>", user.data.phone)
-    //                     setUserPhoneNumber(user.data.phone)
-    //                     // setOwnerPhoneNumber(user.data.phone)
-    //                 })
-    //         })
-    //         .catch((error) => console.log("error", error));
-
-    //     return () => {
-
-    //     }
-    // }, [])
-
     const Delete = () => {
         console.log("delete working")
+        console.log("item _id=>", item._id)
+        AsyncStorage.getItem("jwt") //token comes from asyncStorage
+            .then((res) => {
+                axios
+                    .delete(`${baseURL}products/${item._id}`, //sub is number or the id in this case
+                        {
+                            headers: { Authorization: `Bearer ${res}` }
+                        }
+                    )
+                    // console.log("token=>", res)
+                    .then((res) => {
+                        var filtered = productsGlobal.filter((el) => el._id != item._id);
+                        console.log(filtered)
+                        setProductsGlobal(filtered)
+                        console.log("deleted product successfuly", res)
+                        Toast.show({
+                            topOffset: 60,
+                            type: "success",
+                            text1: "Product deleted successfuly!",
+                            text2: ""
+                        })
+
+                        props.navigation.navigate("home")
+                    })
+                    .catch((error) => {
+                        console.log("error", error)
+                        Toast.show({
+                            topOffset: 60,
+                            type: "error",
+                            text1: "Something went wrong",
+                            text2: ""
+                        })
+                    })
+            })
+            .catch((error) => console.log("error", error));
     }
     const Update = () => {
         console.log("Update working")
