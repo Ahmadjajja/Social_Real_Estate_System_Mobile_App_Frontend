@@ -1,10 +1,15 @@
-import React, { createContext, useState, useEffect } from 'react'      //diff b/w createContext and UseContext?
+import React, { createContext, useState, useEffect, useContext } from 'react'      //diff b/w createContext and UseContext?
 export const ProductContext = createContext();
 
 import baseURL from "../../assets/common/baseUrl"
 import axios from 'axios';
 
+
+//Context Api
+// import AuthGlobal from "./AuthGlobal"
+
 function ProductContextProvider(props) {
+  // const context = useContext(AuthGlobal)
 
 //   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isLoader, setIsLoader] = useState(true)
@@ -19,19 +24,27 @@ function ProductContextProvider(props) {
     //   setProductsGlobal("res.data in productGlobal", res.data);
       setProductsGlobal(res.data)
       setIsLoader(false);
-      console.log("res.data in productGlobal", productsGlobal.length);
+      // console.log("res.data in productGlobal", productsGlobal.length);
 
     })
     .catch((error) => {
       console.log("Api call error", error)
-      setIsLoader(true);
+      setIsLoader(true); 
     })
 
     axios
     .get(`${baseURL}categories`)
     .then((res) => {
-        setCategoriesGlobal(res.data)
+        // if(context.stateUser.isAuthenticated === true ){
+        //   console.log("user is Authenticated")
+        // }
+        setCategoriesGlobal(res.data.reverse())
         console.log("res.data in categoriesGlobal=> " , categoriesGlobal)
+        // const id= Date.now();
+        // const ct= categoriesGlobal;
+        // console.log("ct" , ct.push({id: id, _id: id, name: "My Posts"}))
+        // setCategoriesGlobal()
+
       setIsLoader(false);
     })
     .catch((error) => {

@@ -6,7 +6,9 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import SearchedProducts from './SearchedProducts.js';
 import Banner from "../../Shared/Banner"
 import CategoryFilter from "./CategoryFilter"
+//Context Api
 import { ProductContext } from '../../Context/store/productGlobal.js';
+import AuthGlobal from "../../Context/store/AuthGlobal"
 
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -31,8 +33,8 @@ const ProductContainer = (props) => {
   const [loading, setLoading] = useState(true)
 
   //context values
-  const { isLoader, setIsLoader, productsGlobal, setProductsGlobal, categoriesGlobal, setCategoriesGlobal } = useContext(ProductContext);
-
+  const { isLoader, setIsLoader, productsGlobal, setProductsGlobal, categoriesGlobal, setCategoriesGlobal, userPhoneNumber } = useContext(ProductContext);
+  const context = useContext(AuthGlobal)
 
 
   useEffect(() => {
@@ -47,15 +49,14 @@ const ProductContainer = (props) => {
     setProductsCtg(productsGlobal)
     setInitialState(productsGlobal)
     setLoading(false)
-    console.log("productsGlobal", productsGlobal)
+    // console.log("productsGlobal", productsGlobal)
 
-
-
-    //Categories
+    //categories
     setCategories(categoriesGlobal)
 
 
-    // console.log("categoriesGlobal in ")
+
+    
 
 
 
@@ -69,7 +70,7 @@ const ProductContainer = (props) => {
       setInitialState([])
       setProductsCtg([])
     }
-  }, [productsGlobal])
+  }, [productsGlobal, context.stateUser.isAuthenticated])
 
 
 
@@ -96,23 +97,28 @@ const ProductContainer = (props) => {
   //Categories
   const changeCtg = (ctg) => {
     {
+      // console.log("current ctg in product container", ctg)
       ctg === 'All'
         ?
         [setProductsCtg(initialState), setActive(true), setAllActive(true)]
         : [
-          ctg === 'myPosts'
-            ?
-            (console.log("myPosts "),
-              setActive(true),
-              setAllActive(false))
-            :
             setProductsCtg(
               products.filter((i) => {
-                console.log("myPosts code is not working correctly")
-                console.log("i.category", i.category);
-                console.log("i.category._id", i.category._id);
+
+
+                // console.log("i.category", i.category);
+                // console.log("i.category._id", i.category._id);
                 console.log("ctg", ctg);
-                return i.category._id === ctg
+
+                if( ctg == "631c23ca1c2e5deff32f42fc" &&  context.stateUser.isAuthenticated) {  //this id is of myPosts
+                  // console.log("i.ownerPhoneNumber", i.ownerPhoneNumber)
+                  // console.log("userPhoneNumber", userPhoneNumber)
+
+                  return i.ownerPhoneNumber === userPhoneNumber 
+                } else {
+                  return i.category._id === ctg  //ctg used here for pressed category id
+                }
+                
               }), //here may be error
               setActive(true),
               setAllActive(false),

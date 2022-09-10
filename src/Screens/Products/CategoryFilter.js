@@ -25,48 +25,6 @@ const CategoryFilter = (props) => {
                         </Text>
                     </Badge>
                 </TouchableOpacity>
-                <TouchableOpacity
-                    key={1}
-                    onPress={() => {
-                        props.CategoryFilter('myPosts'), props.setAllActive(-1)
-                    }}
-                >
-                    <Badge style={[styles.center, { margin: 5, borderRadius: 30 },
-                    props.allActive == -1 ? styles.allActive : styles.allInActive
-                    ]}
-                    >
-                        <Text style={{ color: 'white' }}>
-                            My Posts
-                        </Text>
-                    </Badge>
-                </TouchableOpacity>
-                {/* {
-                    props.categories.map((item) => {
-                        <TouchableOpacity
-                            key={item._id.$oid}
-                            onPress={() => {
-                                props.CategoryFilter(item._id),
-                                    props.setActive(props.categories.indexOf(item))
-                            }}
-                        >
-                            <Box>
-                                <Badge style={[styles.center, { margin: 5, borderRadius: 30,backgroundColor: "green" },
-                                props.active == props.categories.indexOf(item) ? styles.active : styles.inactive
-                                ]}
-                                >
-                                    <View>
-                                        <Text style={{ color: 'black',backgroundColor: 'green' }}>
-                                            haha
-                                            {console.log(item._id.$oid)}
-                                        </Text>
-                                    </View>
-
-                                </Badge>
-                            </Box>
-
-                        </TouchableOpacity>
-                    })
-                } */}
                 <View style={styles.listContainer}>
                     <FlatList
 
