@@ -200,7 +200,7 @@ const ProductContainer = (props) => {
                             </View>
                           ) : (
                             <View style={[styles.center, { height: height / 2 }]}>
-                              <Text>No products found</Text>
+                              <Text>No post found</Text>
                             </View>
                           )
                         }

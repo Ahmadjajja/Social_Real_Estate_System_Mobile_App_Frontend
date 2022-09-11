@@ -41,7 +41,7 @@ const ProductCard = (props) => {
             <View style={{ marginBottom: 60 }}>
                 <TouchableOpacity>
                     <Icon
-                        name='heart'
+                        name='heart-o'
                         style={{ position: 'relative' }}
                         color={"green"}
                         size={30}

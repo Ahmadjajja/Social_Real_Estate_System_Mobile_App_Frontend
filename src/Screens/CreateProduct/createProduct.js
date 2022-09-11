@@ -21,7 +21,7 @@ import AuthGlobal from "../../Context/store/AuthGlobal"
 
 export default function CreateProduct(props) {
 
-    const {  productsGlobal, setProductsGlobal,  productDataToUpdate , setProductDataToUpdate} = useContext(ProductContext);
+    const { isLoader, setIsLoader, productsGlobal, setProductsGlobal, categoriesGlobal, setCategoriesGlobal } = useContext(ProductContext);
     const context = useContext(AuthGlobal)
 
     const [categories, setCategories] = useState([])
@@ -32,13 +32,12 @@ export default function CreateProduct(props) {
     const [uploading, setUploading] = useState(false)
     const [uploadingMessage, setUploadingMessage] = useState("Uploading Image...")
 
-    const [finishType, setFinishType] = useState('');
+    const [finishType, setFininshType] = useState('');
     const [reception, setReception] = useState()
     const [category, setCategory] = useState()
     const [categoryId, setCategoryId] = useState('')
     const [userData, setUserData] = useState('')
     const [ownerPhoneNumber, setOwnerPhoneNumber] = useState('')
-    // const []
 
     const [product, setProduct] = useState({
         tital: "",
@@ -54,30 +53,7 @@ export default function CreateProduct(props) {
 
     useEffect(() => {
 
-        if(productDataToUpdate != ''){
-            console.log("productDataToUpdate in createProduct", productDataToUpdate)
-            setProduct({
-                tital: "",
-                location: "",
-                noOfBedrooms: 0,
-                noOfBathrooms: 0,
-                livingRooms: 0,
-                price: 0,
-                area: 0,
-                diningRooms: 0,
-                kitchen: 0
-            })
-            setOwnerPhoneNumber()
-            setPhoto()
-            setFinishType()
-            setCategory()
-            setReception()
-
-        }
-
-        // console.log("productDataToUpdate",productDataToUpdate)
-
-        AsyncStorage.getItem("jwt") //token comes from asyncStorage  
+        AsyncStorage.getItem("jwt") //token comes from asyncStorage
             .then((res) => {
                 setToken(res)
                 axios
@@ -88,7 +64,7 @@ export default function CreateProduct(props) {
                 )
                 // console.log("token=>", res)
                 .then((user) => {
-                    // console.log("user.data.phone =>", user.data.phone)
+                    console.log("user.data =>", user.data.phone)
                     setUserData(user.data)
                     setOwnerPhoneNumber(user.data.phone)
                 })
@@ -111,14 +87,13 @@ export default function CreateProduct(props) {
         return () => {
             setCategories([])
             // setProduct({})
-            // setFinishType('')
+            // setFininshType('')
             // setCategory('')
             // setImage('')
             // setPhoto('')
             // setOwnerPhoneNumber('')
             // setReception('')
             // setCategoryId('')
-            setProductDataToUpdate({})
 
         }
     }, [])
@@ -345,7 +320,7 @@ export default function CreateProduct(props) {
                                     }} _dark={{
                                         bg: 'coolGray.800'
                                     }}
-                                    onValueChange={itemValue => setFinishType(itemValue)}
+                                    onValueChange={itemValue => setFininshType(itemValue)}
                                 // onChangeText={(value) => handleChange("finishType", value)}
                                 // value={product.finishType}
                                 >

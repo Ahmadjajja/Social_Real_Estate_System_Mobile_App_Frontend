@@ -92,7 +92,7 @@ const SingleProducts = (props) => {
         // console.log("productDataToUpdate", productDataToUpdate)
         setProductDataToUpdate(item)
         console.log('item during updatingProduct', item)
-        props.navigation.navigate('Add')
+        props.navigation.navigate('Add', {item: item})
     }
 
     // console.log("userPhoneNumber", userPhoneNumber)
