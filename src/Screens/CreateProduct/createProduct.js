@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Box, Input, NativeBaseProvider, Image, Text, VStack, Select, CheckIcon, Button, FormControl, Stack, ScrollView, TextArea, Center, Heading } from 'native-base';
-import { TouchableOpacity, FlatList, View, Dimensions, StyleSheet, Platform, TextInput,Alert } from 'react-native';
+import { TouchableOpacity, FlatList, View, Dimensions, StyleSheet, Platform, TextInput, Alert } from 'react-native';
 import Icon from "react-native-vector-icons/FontAwesome";
 import * as ImagePicker from "expo-image-picker";
 import baseURL from "../../assets/common/baseUrl";
@@ -21,7 +21,7 @@ import AuthGlobal from "../../Context/store/AuthGlobal"
 
 export default function CreateProduct(props) {
 
-    const { isLoader, setIsLoader, productsGlobal, setProductsGlobal, categoriesGlobal, setCategoriesGlobal } = useContext(ProductContext);
+    const { productsGlobal, setProductsGlobal, productDataToUpdate, setProductDataToUpdate } = useContext(ProductContext);
     const context = useContext(AuthGlobal)
 
     const [categories, setCategories] = useState([])
@@ -57,17 +57,17 @@ export default function CreateProduct(props) {
             .then((res) => {
                 setToken(res)
                 axios
-                .get(`${baseURL}users/${context.stateUser.user.userId}`, //sub is number or the id in this case
-                    {
-                        headers: { Authorization: `Bearer ${res}` }
-                    }
-                )
-                // console.log("token=>", res)
-                .then((user) => {
-                    console.log("user.data =>", user.data.phone)
-                    setUserData(user.data)
-                    setOwnerPhoneNumber(user.data.phone)
-                })
+                    .get(`${baseURL}users/${context.stateUser.user.userId}`, //sub is number or the id in this case
+                        {
+                            headers: { Authorization: `Bearer ${res}` }
+                        }
+                    )
+                    // console.log("token=>", res)
+                    .then((user) => {
+                        console.log("user.data =>", user.data.phone)
+                        setUserData(user.data)
+                        setOwnerPhoneNumber(user.data.phone)
+                    })
             })
             .catch((error) => console.log(error));
 
@@ -86,14 +86,24 @@ export default function CreateProduct(props) {
 
         return () => {
             setCategories([])
-            // setProduct({})
-            // setFininshType('')
-            // setCategory('')
-            // setImage('')
-            // setPhoto('')
-            // setOwnerPhoneNumber('')
-            // setReception('')
-            // setCategoryId('')
+            setProduct({
+                tital: "",
+                location: "",
+                noOfBedrooms: 0,
+                noOfBathrooms: 0,
+                livingRooms: 0,
+                price: 0,
+                area: 0,
+                diningRooms: 0,
+                kitchen: 0,
+            })
+            setFininshType('')
+            setCategory('')
+            setImage('')
+            setPhoto('')
+            setOwnerPhoneNumber('')
+            setReception('')
+            setCategoryId('')
 
         }
     }, [])
@@ -137,7 +147,7 @@ export default function CreateProduct(props) {
         data.append('file', Photo)
         data.append('upload_preset', 'jajja-group-of-company')
         data.append("cloud_name", "jajja-group-of-company")
-        
+
         console.log("image uploading gonna start...")
         fetch("https://api.cloudinary.com/v1_1/jajja-group-of-company/upload", {
             method: "post",
@@ -244,7 +254,7 @@ export default function CreateProduct(props) {
                             text2: ""
                         })
 
-                                                
+
                         //logic for rendering added product at homepage without refreshing here
                         productData.id = Date.now() + Date.now()
                         productData._id = productData.id
@@ -259,7 +269,7 @@ export default function CreateProduct(props) {
                     }
                 })
                 .catch((error) => {
-                    console.log("Error Occured While Posting",error)
+                    console.log("Error Occured While Posting", error)
                     Toast.show({
                         topOffset: 60,
                         type: "error",
@@ -270,7 +280,124 @@ export default function CreateProduct(props) {
         }
     }
 
+    const updateHandler = () => {
+        console.log("ownerPhoneNumber", ownerPhoneNumber)
 
+        if (
+            product.tital == "" ||
+            product.location == "" ||
+            product.noOfBedrooms == 0 ||
+            product.noOfBathrooms == 0 ||
+            product.price == 0 ||
+            product.livingRooms == 0 ||
+            product.area == 0 ||
+            product.diningRooms == 0 ||
+            product.kitchen == 0 ||
+            photo == '' ||
+            category == '' ||
+            reception == undefined ||
+            finishType == ''
+        ) {
+            setErr("Please fill in the form correctly")
+        } else {
+            setErr('')
+            console.log("category ", category)
+            console.log("categories gonna looping and find specific", categories)
+            categories.forEach((item) => {
+                console.log(item.name.toLowerCase())
+                console.log(category.toLowerCase())
+                if (item.name.toLowerCase() === category.toLowerCase()) {
+                    console.log("ID of category => ", item.id, item.name)
+                    setCategoryId(item.id)
+                }
+            })
+
+
+
+
+
+
+
+
+            let productData = {
+                tital: product.tital,
+                location: product.location,
+                finishType: finishType,
+                noOfBedrooms: Number(product.noOfBedrooms),
+                noOfBathrooms: Number(product.noOfBathrooms),
+                livingRooms: Number(product.livingRooms),
+                reception: reception,
+                image: photo,
+                images: [],
+                price: Number(product.price),
+                category: categoryId,
+                area: Number(product.area),
+                diningRooms: Number(product.diningRooms),
+                kitchen: Number(product.kitchen),
+                ownerPhoneNumber: ownerPhoneNumber,
+            }
+
+            console.log("productDataToUpdate.id", productDataToUpdate.id)
+            console.log("productDataToUpdate", productDataToUpdate)
+
+            // console.log("productData  =>", productData);
+
+            // console.log("productData after adding id =>", productData);
+
+
+            // console.log("productGlobal", productsGlobal)
+            // console.log("filteredProductData", filteredProductData)
+
+
+
+
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+            console.log("config=> ", config)
+            console.log("gonna start updating")
+            axios
+                .put(`${baseURL}products/${productDataToUpdate.id}`, productData, config)
+                .then((res) => {
+                    if (res.status == 200 || res.status == 201) {
+                        console.log("update data successfull")
+                        Toast.show({
+                            topOffset: 60,
+                            type: "success",
+                            text1: "Product updated successfuly!",
+                            text2: ""
+                        })
+
+                        productData["id"] = productDataToUpdate.id;
+                        productData["_id"] = productDataToUpdate._id;
+
+                        //main logic for updating data
+                        const filteredProductData = productsGlobal.map((element) => {
+                            return element.id != productDataToUpdate.id ? element : productData;
+                        })
+
+                        setProductsGlobal(filteredProductData)
+                        setProductDataToUpdate({})
+
+
+                        setTimeout(() => {
+                            props.navigation.navigate("home");
+                        }, 500)
+                    }
+                })
+                .catch((error) => {
+                    console.log("Error Occured While Updating", error)
+                    Toast.show({
+                        topOffset: 60,
+                        type: "error",
+                        text1: "Something went wrong",
+                        text2: "please try again"
+                    })
+                })
+        }
+    }
 
 
     return (
@@ -285,12 +412,12 @@ export default function CreateProduct(props) {
                         <Heading style={{ alignSelf: "center" }}>Add Product</Heading>
                         <Box style={styles.imageContainer}>
                             {!uploading ?
-                                <><Image  source={{ uri: photo }} alt="Product Image" style={styles.image}></Image></> :
+                                <><Image source={{ uri: photo }} alt="Product Image" style={styles.image}></Image></> :
                                 <><Text>{uploadingMessage}</Text></>
                             }
-                            
+
                             <TouchableOpacity style={styles.imagePicker} onPress={selectPhotoTapped}>
-                                <Icon  name="camera" color="white" />
+                                <Icon name="camera" color="white" />
                             </TouchableOpacity>
                         </Box>
                         <Box flexDirection="column">
@@ -491,9 +618,17 @@ export default function CreateProduct(props) {
                             />
                         </Box>
                         {err ? <Error style={{ paddingBottom: 10 }} message={err} /> : null}
-                        <Box style={{ marginVertical: 5 }}>
-                            <Button onPress={handleSubmit}>Add Products</Button>
-                        </Box>
+
+                        {productDataToUpdate === undefined || productDataToUpdate === {} || productDataToUpdate === '' ?
+                            <Box style={{ marginVertical: 5 }}>
+                                <Button onPress={handleSubmit}>Add Product</Button>
+                            </Box>
+                            :
+                            <Box style={{ marginVertical: 5 }}>
+                                <Button onPress={updateHandler}>Update Product</Button>
+                            </Box>
+                        }
+
                     </FormControl>
                 </ScrollView>
             </View>
