@@ -30,11 +30,11 @@ const SingleProducts = (props) => {
 
     const [item, setItem] = useState(props.route.params.item);
     console.log("userPhoneNumber in singleProduct", userPhoneNumber)
-    console.log("from single product", props.route.params.item)
+    console.log("from single product",item.finishType)
 
 
     const dialCall = () => {
-
+ 
         let phoneNumber = '';
 
         console.log("item.ownerPhoneNumber => ", item.ownerPhoneNumber)

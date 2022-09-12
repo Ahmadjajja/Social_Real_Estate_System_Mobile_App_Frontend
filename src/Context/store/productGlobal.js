@@ -14,7 +14,7 @@ function ProductContextProvider(props) {
 //   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isLoader, setIsLoader] = useState(true)
 //   const [userId, setUserId] = useState('')
-  const [productsGlobal, setProductsGlobal] = useState([])
+  const [productsGlobal, setProductsGlobal] = useState([]) 
   const [categoriesGlobal, setCategoriesGlobal] = useState([])
   const [userPhoneNumber, setUserPhoneNumber] = useState('')
   const [productDataToUpdate,setProductDataToUpdate] = useState()

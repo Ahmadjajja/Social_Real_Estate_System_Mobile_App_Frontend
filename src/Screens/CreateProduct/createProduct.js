@@ -23,7 +23,7 @@ export default function CreateProduct(props) {
 
     const { productsGlobal, setProductsGlobal, productDataToUpdate, setProductDataToUpdate } = useContext(ProductContext);
     const context = useContext(AuthGlobal)
-
+    // console.log(productDataToUpdate.finishType, "Abu hurairah");
     const [categories, setCategories] = useState([])
     const [photo, setPhoto] = useState('');
     const [image, setImage] = useState('');
@@ -38,6 +38,7 @@ export default function CreateProduct(props) {
     const [categoryId, setCategoryId] = useState('')
     const [userData, setUserData] = useState('')
     const [ownerPhoneNumber, setOwnerPhoneNumber] = useState('')
+    const [categoryToBeUpdating, setCategoryToBeUpdating] = useState()
 
     const [product, setProduct] = useState({
         tital: "",
@@ -76,7 +77,9 @@ export default function CreateProduct(props) {
         // Categories
         axios
             .get(`${baseURL}categories`)
-            .then((res) => setCategories(res.data))
+            .then((res) => {
+                setCategories(res.data)
+            })
             .catch((error) => alert("Error to load categories"));
 
         console.log("categories in createProducts folder", categories);
@@ -98,13 +101,12 @@ export default function CreateProduct(props) {
                 kitchen: 0,
             })
             setFininshType('')
-            setCategory('')
+            setCategory()
             setImage('')
             setPhoto('')
             setOwnerPhoneNumber('')
             setReception('')
             setCategoryId('')
-
         }
     }, [])
 
@@ -263,9 +265,30 @@ export default function CreateProduct(props) {
                         setProductsGlobal(productsGlobal.concat(productData))
                         console.log("products global + product Data", productsGlobal.concat(productData))
 
+                        setCategories([])
+                        setProduct({
+                            tital: "",
+                            location: "",
+                            noOfBedrooms: 0,
+                            noOfBathrooms: 0,
+                            livingRooms: 0,
+                            price: 0,
+                            area: 0,
+                            diningRooms: 0,
+                            kitchen: 0,
+                        })
+                        setFininshType('')
+                        setCategory('')
+                        setImage('')
+                        setPhoto('')
+                        setOwnerPhoneNumber('')
+                        setReception('')
+                        setCategoryId('')
+
                         setTimeout(() => {
                             props.navigation.navigate("home");
                         }, 500)
+
                     }
                 })
                 .catch((error) => {
@@ -346,7 +369,7 @@ export default function CreateProduct(props) {
 
 
             // console.log("productGlobal", productsGlobal)
-            // console.log("filteredProductData", filteredProductData)
+            // console.log("filteredProductData", filteredProductData) 
 
 
 
@@ -381,6 +404,25 @@ export default function CreateProduct(props) {
                         setProductsGlobal(filteredProductData)
                         setProductDataToUpdate({})
 
+                        setCategories([])
+                        setProduct({
+                            tital: "",
+                            location: "",
+                            noOfBedrooms: 0,
+                            noOfBathrooms: 0,
+                            livingRooms: 0,
+                            price: 0,
+                            area: 0,
+                            diningRooms: 0,
+                            kitchen: 0,
+                        })
+                        setFininshType('')
+                        setCategory()
+                        setImage('')
+                        setPhoto('')
+                        setOwnerPhoneNumber('')
+                        setReception('')
+                        setCategoryId('')
 
                         setTimeout(() => {
                             props.navigation.navigate("home");
@@ -399,6 +441,21 @@ export default function CreateProduct(props) {
         }
     }
 
+    const updatingCategory = () => {
+                //This logic uses for setting Updating category in state
+
+                if (!(productDataToUpdate === undefined || productDataToUpdate === {} || productDataToUpdate === '')) {
+                    // setCategoryToBeUpdating()
+                    console.log("I am working")
+
+
+                    categories.find((element) => {
+                        return (element.id === productDataToUpdate.category.id) && console.log(element.name)
+                    })
+                }
+    }
+
+
 
     return (
         <NativeBaseProvider>
@@ -409,224 +466,446 @@ export default function CreateProduct(props) {
             }}>
                 <ScrollView>
                     <FormControl isRequired>
-                        <Heading style={{ alignSelf: "center" }}>Add Product</Heading>
-                        <Box style={styles.imageContainer}>
-                            {!uploading ?
-                                <><Image source={{ uri: photo }} alt="Product Image" style={styles.image}></Image></> :
-                                <><Text>{uploadingMessage}</Text></>
-                            }
-
-                            <TouchableOpacity style={styles.imagePicker} onPress={selectPhotoTapped}>
-                                <Icon name="camera" color="white" />
-                            </TouchableOpacity>
-                        </Box>
-                        <Box flexDirection="column">
-                            <Stack w="100%" >
-                                <FormControl.Label>Title</FormControl.Label>
-                                <Input _light={{
-                                    bg: 'coolGray.100'
-                                }} _dark={{
-                                    bg: 'coolGray.800'
-                                }} _hover={{
-                                    bg: 'coolWhite.200'
-                                }} shadow={2} placeholder="Product Title"
-                                    isRequired
-                                    onChangeText={(value) => handleChange("tital", value)}
-                                    value={product.tital}
-                                />
-                            </Stack>
-                            <VStack w="100%">
-                                <FormControl.Label>Finish Type</FormControl.Label>
-                                <Select shadow={2}
-                                    minWidth="180px" accessibilityLabel="Choose Category"
-                                    placeholder="Choose Finish Type" _selectedItem={{
-                                        bg: 'teal.600',
-                                        endIcon: <CheckIcon size="5" />
-                                    }} _light={{
-                                        bg: 'coolGray.100'
-                                    }} _dark={{
-                                        bg: 'coolGray.800'
-                                    }}
-                                    onValueChange={itemValue => setFininshType(itemValue)}
-                                // onChangeText={(value) => handleChange("finishType", value)}
-                                // value={product.finishType}
-                                >
-                                    <Select.Item shadow={2} label="Furnished" value="Furnished" />
-                                    <Select.Item shadow={2} label=" Finished with ACs & Kitchen" value=" Finished with ACs & Kitchen" />
-                                    <Select.Item shadow={2} label=" Finished without ACs" value=" Finished without ACs" />
-                                </Select>
-                            </VStack>
-                        </Box>
-                        <Box flexDirection="column">
-                            <Stack w="100%" >
-                                <FormControl.Label>Bedrooms</FormControl.Label>
-                                <Input _light={{
-                                    bg: 'coolGray.100'
-                                }} _dark={{
-                                    bg: 'coolGray.800'
-                                }} _hover={{
-                                    bg: 'coolWhite.200'
-                                }} shadow={2} placeholder="Bedrooms"
-                                    onChangeText={(value) => handleChange("noOfBedrooms", value)}
-                                    value={product.noOfBedrooms}
-                                    keyboardType="numeric"
-                                />
-                            </Stack>
-                            <Stack w="100%" >
-                                <FormControl.Label>Bathrooms</FormControl.Label>
-                                <Input _light={{
-                                    bg: 'coolGray.100'
-                                }} _dark={{
-                                    bg: 'coolGray.800'
-                                }} _hover={{
-                                    bg: 'coolWhite.200'
-                                }} shadow={2} placeholder="Bathrooms"
-                                    keyboardType="numeric"
-                                    onChangeText={(value) => handleChange("noOfBathrooms", value)}
-                                    value={product.noOfBathrooms} />
-                            </Stack>
-                        </Box>
-                        <Box flexDirection="column">
-                            <Stack w="100%" >
-                                <FormControl.Label>Area</FormControl.Label>
-                                <Input _light={{
-                                    bg: 'coolGray.100'
-                                }} _dark={{
-                                    bg: 'coolGray.800'
-                                }} _hover={{
-                                    bg: 'coolWhite.200'
-                                }} shadow={2} placeholder="Area"
-                                    onChangeText={(value) => handleChange("area", value)}
-                                    value={product.area}
-                                    keyboardType="numeric"
-                                />
-                            </Stack>
-                            <Stack w="100%" >
-                                <FormControl.Label>Dining Rooms</FormControl.Label>
-                                <Input _light={{
-                                    bg: 'coolGray.100'
-                                }} _dark={{
-                                    bg: 'coolGray.800'
-                                }} _hover={{
-                                    bg: 'coolWhite.200'
-                                }} shadow={2} placeholder="Bathrooms"
-                                    onChangeText={(value) => handleChange("diningRooms", value)}
-                                    value={product.diningRooms}
-                                    keyboardType="numeric"
-                                />
-                            </Stack>
-                        </Box>
-                        <Box flexDirection="column">
-                            <Stack w="100%">
-                                <FormControl.Label>Living Rooms</FormControl.Label>
-                                <Input _light={{
-                                    bg: 'coolGray.100'
-                                }} _dark={{
-                                    bg: 'coolGray.800'
-                                }} _hover={{
-                                    bg: 'coolWhite.200'
-                                }} shadow={2} placeholder="Living Rooms"
-                                    onChangeText={(value) => handleChange("livingRooms", value)}
-                                    value={product.livingRooms}
-                                    keyboardType="numeric"
-                                />
-                            </Stack>
-                            <VStack w="100%">
-                                <FormControl.Label>Reception</FormControl.Label>
-                                <Select shadow={2}
-                                    minWidth="180px" accessibilityLabel="Choose Reception"
-                                    placeholder="Choose Reception" _selectedItem={{
-                                        bg: 'teal.600',
-                                        endIcon: <CheckIcon size="5" />
-                                    }} _light={{
-                                        bg: 'coolGray.100'
-                                    }} _dark={{
-                                        bg: 'coolGray.800'
-                                    }}
-                                    onValueChange={itemValue => setReception(itemValue)}
-
-                                // onChangeText={(value) => handleChange("reception", value)}
-                                // value={product.reception}
-                                >
-                                    <Select.Item shadow={2} label="Yes" value="Yes" />
-                                    <Select.Item shadow={2} label="NO" value="NO" />
-                                </Select>
-                            </VStack>
-                        </Box>
-                        <Box flexDirection="column">
-                            <Stack w="100%">
-                                <FormControl.Label>Price</FormControl.Label>
-                                <Input _light={{
-                                    bg: 'coolGray.100'
-                                }} _dark={{
-                                    bg: 'coolGray.800'
-                                }} _hover={{
-                                    bg: 'coolWhite.200'
-                                }} shadow={2} placeholder="Price"
-                                    onChangeText={(value) => handleChange("price", value)}
-                                    value={product.price}
-                                    keyboardType="numeric"
-                                />
-                            </Stack>
-                            <VStack w="100%">
-                                <FormControl.Label>Category</FormControl.Label>
-                                <Select shadow={2}
-                                    minWidth="180px" accessibilityLabel="Choose Category"
-                                    placeholder="Choose Category" _selectedItem={{
-                                        bg: 'teal.600',
-                                        endIcon: <CheckIcon size="5" />
-                                    }} _light={{
-                                        bg: 'coolGray.100'
-                                    }} _dark={{
-                                        bg: 'coolGray.800'
-                                    }}
-
-                                    onValueChange={itemValue => setCategory(itemValue)}
-
-                                // onChangeText={(value) => handleChange("category", value)}
-                                // value={product.category}
-                                >
-                                    <Select.Item shadow={2} label="Apartment" value="Apartment" />
-                                    <Select.Item shadow={2} label="Villa" value="Villa" />
-                                    <Select.Item shadow={2} label="Studio" value="Studio" />
-                                    <Select.Item shadow={2} label="Challet" value="Challet" />
-                                    <Select.Item shadow={2} label="Twinhouse" value="Townhouse" />
-                                </Select>
-                            </VStack>
-                        </Box>
-                        <Box flexDirection="row" justifyContent={"center"}>
-                            <Stack w="100%" >
-                                <FormControl.Label>kitchen</FormControl.Label>
-                                <Input _light={{
-                                    bg: 'coolGray.100'
-                                }} _dark={{
-                                    bg: 'coolGray.800'
-                                }} _hover={{
-                                    bg: 'coolWhite.200'
-                                }} shadow={2} placeholder="Kitchen"
-                                    onChangeText={(value) => handleChange("kitchen", value)}
-                                    value={product.kitchen}
-                                    keyboardType="numeric"
-                                />
-                            </Stack>
-                        </Box>
-                        <Box w="100%" marginTop="2" style={{ marginBottom: 5 }}>
-                            <FormControl.Label style={{ paddingRight: 175 }}>Location</FormControl.Label>
-                            <TextArea h={20} placeholder="Location Here" w="100%"
-                                onChangeText={(value) => handleChange("location", value)}
-                                value={product.location}
-                            />
-                        </Box>
-                        {err ? <Error style={{ paddingBottom: 10 }} message={err} /> : null}
 
                         {productDataToUpdate === undefined || productDataToUpdate === {} || productDataToUpdate === '' ?
-                            <Box style={{ marginVertical: 5 }}>
-                                <Button onPress={handleSubmit}>Add Product</Button>
-                            </Box>
+
+                            <>
+
+                                <Heading style={{ alignSelf: "center" }}>Add Product</Heading>
+                                <Box style={styles.imageContainer}>
+                                    {!uploading ?
+                                        <><Image source={{ uri: photo }} alt="Product Image" style={styles.image}></Image></> :
+                                        <><Text>{uploadingMessage}</Text></>
+                                    }
+
+                                    <TouchableOpacity style={styles.imagePicker} onPress={selectPhotoTapped}>
+                                        <Icon name="camera" color="white" />
+                                    </TouchableOpacity>
+                                </Box>
+                                <Box flexDirection="column">
+                                    <Stack w="100%" >
+                                        <FormControl.Label>Title</FormControl.Label>
+                                        <Input _light={{
+                                            bg: 'coolGray.100'
+                                        }} _dark={{
+                                            bg: 'coolGray.800'
+                                        }} _hover={{
+                                            bg: 'coolWhite.200'
+                                        }} shadow={2} placeholder="Product Title"
+                                            isRequired
+                                            onChangeText={(value) => handleChange("tital", value)}
+                                            value={product.tital}
+                                        />
+                                    </Stack>
+                                    <VStack w="100%">
+                                        <FormControl.Label>Finish Type</FormControl.Label>
+                                        <Select shadow={2}
+                                            minWidth="180px" accessibilityLabel="Choose Category"
+                                            placeholder="Choose Finish Type" _selectedItem={{
+                                                bg: 'teal.600',
+                                                endIcon: <CheckIcon size="5" />
+                                            }} _light={{
+                                                bg: 'coolGray.100'
+                                            }} _dark={{
+                                                bg: 'coolGray.800'
+                                            }}
+                                            onValueChange={itemValue => setFininshType(itemValue)}
+                                        // onChangeText={(value) => handleChange("finishType", value)}
+                                        // value={product.finishType}
+                                        >
+                                            <Select.Item shadow={2} label="Furnished" value="Furnished" />
+                                            <Select.Item shadow={2} label=" Finished with ACs & Kitchen" value=" Finished with ACs & Kitchen" />
+                                            <Select.Item shadow={2} label=" Finished without ACs" value=" Finished without ACs" />
+                                        </Select>
+                                    </VStack>
+                                </Box>
+                                <Box flexDirection="column">
+                                    <Stack w="100%" >
+                                        <FormControl.Label>Bedrooms</FormControl.Label>
+                                        <Input _light={{
+                                            bg: 'coolGray.100'
+                                        }} _dark={{
+                                            bg: 'coolGray.800'
+                                        }} _hover={{
+                                            bg: 'coolWhite.200'
+                                        }} shadow={2} placeholder="Bedrooms"
+                                            onChangeText={(value) => handleChange("noOfBedrooms", value)}
+                                            value={product.noOfBedrooms}
+                                            keyboardType="numeric"
+                                        />
+                                    </Stack>
+                                    <Stack w="100%" >
+                                        <FormControl.Label>Bathrooms</FormControl.Label>
+                                        <Input _light={{
+                                            bg: 'coolGray.100'
+                                        }} _dark={{
+                                            bg: 'coolGray.800'
+                                        }} _hover={{
+                                            bg: 'coolWhite.200'
+                                        }} shadow={2} placeholder="Bathrooms"
+                                            keyboardType="numeric"
+                                            onChangeText={(value) => handleChange("noOfBathrooms", value)}
+                                            value={product.noOfBathrooms} />
+                                    </Stack>
+                                </Box>
+                                <Box flexDirection="column">
+                                    <Stack w="100%" >
+                                        <FormControl.Label>Area</FormControl.Label>
+                                        <Input _light={{
+                                            bg: 'coolGray.100'
+                                        }} _dark={{
+                                            bg: 'coolGray.800'
+                                        }} _hover={{
+                                            bg: 'coolWhite.200'
+                                        }} shadow={2} placeholder="Area"
+                                            onChangeText={(value) => handleChange("area", value)}
+                                            value={product.area}
+                                            keyboardType="numeric"
+                                        />
+                                    </Stack>
+                                    <Stack w="100%" >
+                                        <FormControl.Label>Dining Rooms</FormControl.Label>
+                                        <Input _light={{
+                                            bg: 'coolGray.100'
+                                        }} _dark={{
+                                            bg: 'coolGray.800'
+                                        }} _hover={{
+                                            bg: 'coolWhite.200'
+                                        }} shadow={2} placeholder="Bathrooms"
+                                            onChangeText={(value) => handleChange("diningRooms", value)}
+                                            value={product.diningRooms}
+                                            keyboardType="numeric"
+                                        />
+                                    </Stack>
+                                </Box>
+                                <Box flexDirection="column">
+                                    <Stack w="100%">
+                                        <FormControl.Label>Living Rooms</FormControl.Label>
+                                        <Input _light={{
+                                            bg: 'coolGray.100'
+                                        }} _dark={{
+                                            bg: 'coolGray.800'
+                                        }} _hover={{
+                                            bg: 'coolWhite.200'
+                                        }} shadow={2} placeholder="Living Rooms"
+                                            onChangeText={(value) => handleChange("livingRooms", value)}
+                                            value={product.livingRooms}
+                                            keyboardType="numeric"
+                                        />
+                                    </Stack>
+                                    <VStack w="100%">
+                                        <FormControl.Label>Reception</FormControl.Label>
+                                        <Select shadow={2}
+                                            minWidth="180px" accessibilityLabel="Choose Reception"
+                                            placeholder="Choose Reception" _selectedItem={{
+                                                bg: 'teal.600',
+                                                endIcon: <CheckIcon size="5" />
+                                            }} _light={{
+                                                bg: 'coolGray.100'
+                                            }} _dark={{
+                                                bg: 'coolGray.800'
+                                            }}
+                                            onValueChange={itemValue => setReception(itemValue)}
+
+                                        // onChangeText={(value) => handleChange("reception", value)}
+                                        // value={product.reception}
+                                        >
+                                            <Select.Item shadow={2} label="Yes" value="Yes" />
+                                            <Select.Item shadow={2} label="NO" value="NO" />
+                                        </Select>
+                                    </VStack>
+                                </Box>
+                                <Box flexDirection="column">
+                                    <Stack w="100%">
+                                        <FormControl.Label>Price</FormControl.Label>
+                                        <Input _light={{
+                                            bg: 'coolGray.100'
+                                        }} _dark={{
+                                            bg: 'coolGray.800'
+                                        }} _hover={{
+                                            bg: 'coolWhite.200'
+                                        }} shadow={2} placeholder="Price"
+                                            onChangeText={(value) => handleChange("price", value)}
+                                            value={product.price}
+                                            keyboardType="numeric"
+                                        />
+                                    </Stack>
+                                    <VStack w="100%">
+                                        <FormControl.Label>Category</FormControl.Label>
+                                        <Select shadow={2}
+                                            minWidth="180px" accessibilityLabel="Choose Category"
+                                            placeholder="Choose Category" _selectedItem={{
+                                                bg: 'teal.600',
+                                                endIcon: <CheckIcon size="5" />
+                                            }} _light={{
+                                                bg: 'coolGray.100'
+                                            }} _dark={{
+                                                bg: 'coolGray.800'
+                                            }}
+
+                                            onValueChange={itemValue => setCategory(itemValue)}
+
+                                        // onChangeText={(value) => handleChange("category", value)}
+                                        // value={product.category}
+                                        >
+                                            <Select.Item shadow={2} label="Apartment" value="Apartment" />
+                                            <Select.Item shadow={2} label="Villa" value="Villa" />
+                                            <Select.Item shadow={2} label="Studio" value="Studio" />
+                                            <Select.Item shadow={2} label="Challet" value="Challet" />
+                                            <Select.Item shadow={2} label="Twinhouse" value="Townhouse" />
+                                        </Select>
+                                    </VStack>
+                                </Box>
+                                <Box flexDirection="row" justifyContent={"center"}>
+                                    <Stack w="100%" >
+                                        <FormControl.Label>kitchen</FormControl.Label>
+                                        <Input _light={{
+                                            bg: 'coolGray.100'
+                                        }} _dark={{
+                                            bg: 'coolGray.800'
+                                        }} _hover={{
+                                            bg: 'coolWhite.200'
+                                        }} shadow={2} placeholder="Kitchen"
+                                            onChangeText={(value) => handleChange("kitchen", value)}
+                                            value={product.kitchen}
+                                            keyboardType="numeric"
+                                        />
+                                    </Stack>
+                                </Box>
+                                <Box w="100%" marginTop="2" style={{ marginBottom: 5 }}>
+                                    <FormControl.Label style={{ paddingRight: 175 }}>Location</FormControl.Label>
+                                    <TextArea h={20} placeholder="Location Here" w="100%"
+                                        onChangeText={(value) => handleChange("location", value)}
+                                        value={product.location}
+                                    />
+                                </Box>
+                                {err ? <Error style={{ paddingBottom: 10 }} message={err} /> : null}
+                                <Box style={{ marginVertical: 5 }}>
+                                    <Button onPress={handleSubmit}>Add Product</Button>
+                                </Box>
+                            </>
                             :
-                            <Box style={{ marginVertical: 5 }}>
-                                <Button onPress={updateHandler}>Update Product</Button>
-                            </Box>
+                            // Update Product
+                            <>
+
+                                <Heading style={{ alignSelf: "center" }}>Update Product</Heading>
+                                <Box style={styles.imageContainer}>
+                                    {!uploading ?
+                                        <><Image source={{ uri: productDataToUpdate.image }} alt="Product Image" style={styles.image}></Image></> :
+                                        <><Text>{uploadingMessage}</Text></>
+                                    }
+
+                                    <TouchableOpacity style={styles.imagePicker} onPress={selectPhotoTapped}>
+                                        <Icon name="camera" color="white" />
+                                    </TouchableOpacity>
+                                </Box>
+                                <Box flexDirection="column">
+                                    <Stack w="100%" >
+                                        <FormControl.Label>Title</FormControl.Label>
+                                        <Input _light={{
+                                            bg: 'coolGray.100'
+                                        }} _dark={{
+                                            bg: 'coolGray.800'
+                                        }} _hover={{
+                                            bg: 'coolWhite.200'
+                                        }} shadow={2} placeholder="Product Title"
+                                            isRequired
+                                            onChangeText={(value) => handleChange("tital", value)}
+                                            value={productDataToUpdate.tital}
+                                        />
+                                    </Stack>
+                                    <VStack w="100%">
+                                        <FormControl.Label>Finish Type</FormControl.Label>
+                                        <Select shadow={2}
+                                            minWidth="180px" accessibilityLabel="Choose Category"
+                                            placeholder="Choose Finish Type" _selectedItem={{
+                                                bg: 'teal.600',
+                                                endIcon: <CheckIcon size="5" />
+                                            }} _light={{
+                                                bg: 'coolGray.100'
+                                            }} _dark={{
+                                                bg: 'coolGray.800'
+                                            }}
+                                            onValueChange={itemValue => setFininshType(itemValue)}
+                                            // onChangeText={(value) => handleChange("finishType", value)}
+                                            // defaultValue={}
+                                            selectedValue={productDataToUpdate.finishType}
+                                        >
+                                            <Select.Item shadow={2} label="Furnished" value="Furnished" />
+                                            <Select.Item shadow={2} label=" Finished with ACs & Kitchen" value=" Finished with ACs & Kitchen" />
+                                            <Select.Item shadow={2} label=" Finished without ACs" value=" Finished without ACs" />
+                                        </Select>
+                                    </VStack>
+                                </Box>
+                                <Box flexDirection="column">
+                                    <Stack w="100%" >
+                                        <FormControl.Label>Bedrooms</FormControl.Label>
+                                        <Input _light={{
+                                            bg: 'coolGray.100'
+                                        }} _dark={{
+                                            bg: 'coolGray.800'
+                                        }} _hover={{
+                                            bg: 'coolWhite.200'
+                                        }} shadow={2} placeholder="Bedrooms"
+                                            onChangeText={(value) => handleChange("noOfBedrooms", value)}
+                                            value={product.noOfBedrooms}
+                                            keyboardType="numeric"
+                                        />
+                                    </Stack>
+                                    <Stack w="100%" >
+                                        <FormControl.Label>Bathrooms</FormControl.Label>
+                                        <Input _light={{
+                                            bg: 'coolGray.100'
+                                        }} _dark={{
+                                            bg: 'coolGray.800'
+                                        }} _hover={{
+                                            bg: 'coolWhite.200'
+                                        }} shadow={2} placeholder="Bathrooms"
+                                            keyboardType="numeric"
+                                            onChangeText={(value) => handleChange("noOfBathrooms", value)}
+                                            value={parseInt(productDataToUpdate.noOfBathrooms)} />
+                                    </Stack>
+                                </Box>
+                                <Box flexDirection="column">
+                                    <Stack w="100%" >
+                                        <FormControl.Label>Area</FormControl.Label>
+                                        <Input _light={{
+                                            bg: 'coolGray.100'
+                                        }} _dark={{
+                                            bg: 'coolGray.800'
+                                        }} _hover={{
+                                            bg: 'coolWhite.200'
+                                        }} shadow={2} placeholder="Area"
+                                            onChangeText={(value) => handleChange("area", value)}
+                                            value={product.area}
+                                            keyboardType="numeric"
+                                        />
+                                    </Stack>
+                                    <Stack w="100%" >
+                                        <FormControl.Label>Dining Rooms</FormControl.Label>
+                                        <Input _light={{
+                                            bg: 'coolGray.100'
+                                        }} _dark={{
+                                            bg: 'coolGray.800'
+                                        }} _hover={{
+                                            bg: 'coolWhite.200'
+                                        }} shadow={2} placeholder="Bathrooms"
+                                            onChangeText={(value) => handleChange("diningRooms", value)}
+                                            value={product.diningRooms}
+                                            keyboardType="numeric"
+                                        />
+                                    </Stack>
+                                </Box>
+                                <Box flexDirection="column">
+                                    <Stack w="100%">
+                                        <FormControl.Label>Living Rooms</FormControl.Label>
+                                        <Input _light={{
+                                            bg: 'coolGray.100'
+                                        }} _dark={{
+                                            bg: 'coolGray.800'
+                                        }} _hover={{
+                                            bg: 'coolWhite.200'
+                                        }} shadow={2} placeholder="Living Rooms"
+                                            onChangeText={(value) => handleChange("livingRooms", value)}
+                                            value={product.livingRooms}
+                                            keyboardType="numeric"
+                                        />
+                                    </Stack>
+                                    <VStack w="100%">
+                                        <FormControl.Label>Reception</FormControl.Label>
+                                        <Select shadow={2}
+                                            minWidth="180px" accessibilityLabel="Choose Reception"
+                                            placeholder="Choose Reception" _selectedItem={{
+                                                bg: 'teal.600',
+                                                endIcon: <CheckIcon size="5" />
+                                            }} _light={{
+                                                bg: 'coolGray.100'
+                                            }} _dark={{
+                                                bg: 'coolGray.800'
+                                            }}
+                                            onValueChange={itemValue => setReception(itemValue)}
+
+                                            // onChangeText={(value) => handleChange("reception", value)}
+                                            // value={product.reception}
+                                            selectedValue={productDataToUpdate.reception}
+
+                                        >
+                                            <Select.Item shadow={2} label="Yes" value="Yes" />
+                                            <Select.Item shadow={2} label="NO" value="NO" />
+                                        </Select>
+                                    </VStack>
+                                </Box>
+                                <Box flexDirection="column">
+                                    <Stack w="100%">
+                                        <FormControl.Label>Price</FormControl.Label>
+                                        <Input _light={{
+                                            bg: 'coolGray.100'
+                                        }} _dark={{
+                                            bg: 'coolGray.800'
+                                        }} _hover={{
+                                            bg: 'coolWhite.200'
+                                        }} shadow={2} placeholder="Price"
+                                            onChangeText={(value) => handleChange("price", value)}
+                                            value={product.price}
+                                            keyboardType="numeric"
+                                        />
+                                    </Stack>
+                                    <VStack w="100%">
+                                        <FormControl.Label>Category</FormControl.Label>
+                                        <Select shadow={2}
+                                            minWidth="180px" accessibilityLabel="Choose Category"
+                                            placeholder="Choose Category" _selectedItem={{
+                                                bg: 'teal.600',
+                                                endIcon: <CheckIcon size="5" />
+                                            }} _light={{
+                                                bg: 'coolGray.100'
+                                            }} _dark={{
+                                                bg: 'coolGray.800'
+                                            }}
+
+                                            onValueChange={itemValue => setCategory(itemValue)}
+
+                                        // onChangeText={(value) => handleChange("category", value)}
+                                        // value={product.category}
+                                        selectedValue={categoryToBeUpdating}
+                                        >
+                                            <Select.Item shadow={2} label="Apartment" value="Apartment" />
+                                            <Select.Item shadow={2} label="Villa" value="Villa" />
+                                            <Select.Item shadow={2} label="Studio" value="Studio" />
+                                            <Select.Item shadow={2} label="Challet" value="Challet" />
+                                            <Select.Item shadow={2} label="Twinhouse" value="Townhouse" />
+                                        </Select>
+                                    </VStack>
+                                </Box>
+                                <Box flexDirection="row" justifyContent={"center"}>
+                                    <Stack w="100%" >
+                                        <FormControl.Label>kitchen</FormControl.Label>
+                                        <Input _light={{
+                                            bg: 'coolGray.100'
+                                        }} _dark={{
+                                            bg: 'coolGray.800'
+                                        }} _hover={{
+                                            bg: 'coolWhite.200'
+                                        }} shadow={2} placeholder="Kitchen"
+                                            onChangeText={(value) => handleChange("kitchen", value)}
+                                            value={product.kitchen}
+                                            keyboardType="numeric"
+                                        />
+                                    </Stack>
+                                </Box>
+                                <Box w="100%" marginTop="2" style={{ marginBottom: 5 }}>
+                                    <FormControl.Label style={{ paddingRight: 175 }}>Location</FormControl.Label>
+                                    <TextArea h={20} placeholder="Location Here" w="100%"
+                                        onChangeText={(value) => handleChange("location", value)}
+                                        value={productDataToUpdate.location}
+                                    />
+                                </Box>
+                                {err ? <Error style={{ paddingBottom: 10 }} message={err} /> : null}
+                                <Box style={{ marginVertical: 5 }}>
+                                    <Button onPress={updatingCategory}>Update Product</Button>
+                                </Box>
+                            </>
+
                         }
 
                     </FormControl>
