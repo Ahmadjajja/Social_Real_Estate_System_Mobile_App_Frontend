@@ -18,6 +18,7 @@ function ProductContextProvider(props) {
   const [categoriesGlobal, setCategoriesGlobal] = useState([])
   const [userPhoneNumber, setUserPhoneNumber] = useState('')
   const [productDataToUpdate,setProductDataToUpdate] = useState()
+  const [dataUpdationRender, setDataUpdationRender] = useState(1)
   useEffect(() => {
     axios
     .get(`${baseURL}products`)
@@ -55,7 +56,7 @@ function ProductContextProvider(props) {
   }, [])
 
   return (
-    <ProductContext.Provider value={{productDataToUpdate,setProductDataToUpdate, isLoader, setIsLoader, productsGlobal, setProductsGlobal, categoriesGlobal,  setCategoriesGlobal, userPhoneNumber, setUserPhoneNumber}}>
+    <ProductContext.Provider value={{dataUpdationRender, setDataUpdationRender ,productDataToUpdate,setProductDataToUpdate, isLoader, setIsLoader, productsGlobal, setProductsGlobal, categoriesGlobal,  setCategoriesGlobal, userPhoneNumber, setUserPhoneNumber}}>
       {props.children}
     </ProductContext.Provider>
   )

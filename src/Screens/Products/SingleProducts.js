@@ -26,7 +26,7 @@ var { width, height } = Dimensions.get("window")
 
 const SingleProducts = (props) => {
     const context = useContext(AuthGlobal)
-    const { userPhoneNumber, productsGlobal, setProductsGlobal,setProductDataToUpdate ,productDataToUpdate} = useContext(ProductContext)
+    const {dataUpdationRender, setDataUpdationRender, userPhoneNumber, productsGlobal, setProductsGlobal,setProductDataToUpdate ,productDataToUpdate} = useContext(ProductContext)
 
     const [item, setItem] = useState(props.route.params.item);
     console.log("userPhoneNumber in singleProduct", userPhoneNumber)
@@ -91,6 +91,7 @@ const SingleProducts = (props) => {
     const Update = () => {
         // console.log("productDataToUpdate", productDataToUpdate)
         setProductDataToUpdate(item)
+        setDataUpdationRender(dataUpdationRender + 1)
         console.log('item during updatingProduct', item)
         props.navigation.navigate('Add', {item: item})
     }
