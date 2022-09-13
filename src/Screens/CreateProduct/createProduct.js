@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 import { Box, Input, NativeBaseProvider, Image, Text, VStack, Select, CheckIcon, Button, FormControl, Stack, ScrollView, TextArea, Center, Heading } from 'native-base';
 import { TouchableOpacity, FlatList, View, Dimensions, StyleSheet, Platform, TextInput, Alert } from 'react-native';
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -21,7 +21,7 @@ import AuthGlobal from "../../Context/store/AuthGlobal"
 
 export default function CreateProduct(props) {
 
-    const { productsGlobal, setProductsGlobal, productDataToUpdate, setProductDataToUpdate } = useContext(ProductContext);
+    const { productsGlobal, setProductsGlobal, productDataToUpdate, setProductDataToUpdate,categoriesGlobal, setCategoriesGlobal } = useContext(ProductContext);
     const context = useContext(AuthGlobal)
     // console.log(productDataToUpdate.finishType, "Abu hurairah");
     const [categories, setCategories] = useState([])
@@ -39,6 +39,7 @@ export default function CreateProduct(props) {
     const [userData, setUserData] = useState('')
     const [ownerPhoneNumber, setOwnerPhoneNumber] = useState('')
     const [categoryToBeUpdating, setCategoryToBeUpdating] = useState()
+    const ref = useRef(null);
 
     const [product, setProduct] = useState({
         tital: "",
@@ -51,6 +52,8 @@ export default function CreateProduct(props) {
         diningRooms: 0,
         kitchen: 0,
     })
+
+
 
     useEffect(() => {
 
@@ -109,6 +112,22 @@ export default function CreateProduct(props) {
             setCategoryId('')
         }
     }, [])
+
+    useEffect(() => {
+        //This logic uses for setting Updating category in state
+
+        if (!(productDataToUpdate === undefined || productDataToUpdate === {} || productDataToUpdate === '')) {
+            // setCategoryToBeUpdating()
+            console.log("category function code working")
+
+
+            const ct = categoriesGlobal.find((element) => {
+                return (element.id === productDataToUpdate.category.id)
+            })
+            console.log("ct   ", ct.name)
+            setCategoryToBeUpdating(ct.name)
+        }
+    }, [productDataToUpdate])
 
 
 
@@ -440,21 +459,6 @@ export default function CreateProduct(props) {
                 })
         }
     }
-
-    const updatingCategory = () => {
-                //This logic uses for setting Updating category in state
-
-                if (!(productDataToUpdate === undefined || productDataToUpdate === {} || productDataToUpdate === '')) {
-                    // setCategoryToBeUpdating()
-                    console.log("I am working")
-
-
-                    categories.find((element) => {
-                        return (element.id === productDataToUpdate.category.id) && console.log(element.name)
-                    })
-                }
-    }
-
 
 
     return (
@@ -865,9 +869,9 @@ export default function CreateProduct(props) {
 
                                             onValueChange={itemValue => setCategory(itemValue)}
 
-                                        // onChangeText={(value) => handleChange("category", value)}
-                                        // value={product.category}
-                                        selectedValue={categoryToBeUpdating}
+                                            // onChangeText={(value) => handleChange("category", value)}
+                                            // value={product.category}
+                                            selectedValue={categoryToBeUpdating}
                                         >
                                             <Select.Item shadow={2} label="Apartment" value="Apartment" />
                                             <Select.Item shadow={2} label="Villa" value="Villa" />
@@ -887,9 +891,10 @@ export default function CreateProduct(props) {
                                         }} _hover={{
                                             bg: 'coolWhite.200'
                                         }} shadow={2} placeholder="Kitchen"
-                                            onChangeText={(value) => handleChange("kitchen", value)}
-                                            value={product.kitchen}
+                                            // onChangeText={(value) => handleChange("kitchen", value)}
+                                            value={5}
                                             keyboardType="numeric"
+                                            ref={ref}
                                         />
                                     </Stack>
                                 </Box>
@@ -902,7 +907,7 @@ export default function CreateProduct(props) {
                                 </Box>
                                 {err ? <Error style={{ paddingBottom: 10 }} message={err} /> : null}
                                 <Box style={{ marginVertical: 5 }}>
-                                    <Button onPress={updatingCategory}>Update Product</Button>
+                                    <Button onPress={updateHandler}>Update Product</Button>
                                 </Box>
                             </>
 
