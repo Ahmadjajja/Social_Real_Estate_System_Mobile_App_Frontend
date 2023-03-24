@@ -1,18 +1,18 @@
-# Hackathon_Frontend_2022_Batch_04
-This is FRONT_END of Real_estate mobile app that i have made during Final Hackathon of WEB & MOBILE BATCH 04 organise by Saylani Mass IT Training Program(SMIT) on August 28, 2022.
-## NOTE:
-  Saylani Mass IT Training Program Institution is launced by Saylani Welfare International Trust of Pakistan, This institution is number one institution of pakistan in provding latest IT Skills.
+** Welcome to the FRONT_END of the Real Estate Mobile App **, developed as part of the Final Hackathon of the WEB & MOBILE BATCH 04 organized by **[Saylani Mass IT Training Program(SMIT)](https://saylaniwelfare.com/en/services/education/technical-education/saylani-mass-it-training)** on August 28, 2022.
+
+It is important to note that **[Saylani Mass IT Training Program(SMIT)](https://saylaniwelfare.com/en/services/education/technical-education/saylani-mass-it-training)** is an exceptional institution launched by the **[Saylani Welfare International Trust of Pakistan](https://saylaniwelfare.com/en)**, dedicated to providing the latest IT skills to aspiring developers.
+
+**The FRONT_END of the Real Estate Mobile App** is a truly impressive project, with a wide range of functionalities that make it a must-have for anyone in the real estate industry. It includes-
+* authentication functionality to ensure secure access, as well as 
+* A dashboard and a landing page to help users navigate the app with ease. 
+* Users can view properties, add new properties, delete properties, and even update existing ones. 
+* Additionally, the app includes a call-to-action feature that allows users to contact property owners for purchases. 
+* Users can also search for specific properties by name. 
+* Even like or dislike properties to make their browsing experience more interactive.
+
+Overall, **the FRONT_END of the Real Estate Mobile App** is an incredible piece of software that showcases the developer's excellent skills in creating a modern and functional mobile app with an intuitive user interface.
 
 
-## Project Functionalities:
-01) Aunthentication
-02) Dashboard
-03) Landing Page
-04) View Property
-05) Add Property
-06) Delete Property
-07) update property
-08) Call To owner of property for purchasing property
-09) Search with name of property
-10) Like, dislike property
+
+**[The Backend of The Real Estate Mobile App](https://github.com/Ahmadjajja/-Hackathon_Backend_2022_Batch_04)**
 
