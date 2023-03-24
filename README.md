@@ -1,4 +1,4 @@
-** Welcome to the FRONT_END of the Real Estate Mobile App **, developed as part of the Final Hackathon of the WEB & MOBILE BATCH 04 organized by **[Saylani Mass IT Training Program(SMIT)](https://saylaniwelfare.com/en/services/education/technical-education/saylani-mass-it-training)** on August 28, 2022.
+**Welcome to the FRONT_END of the Real Estate Mobile App**, developed as part of the Final Hackathon of the WEB & MOBILE BATCH 04 organized by **[Saylani Mass IT Training Program(SMIT)](https://saylaniwelfare.com/en/services/education/technical-education/saylani-mass-it-training)** on August 28, 2022.
 
 It is important to note that **[Saylani Mass IT Training Program(SMIT)](https://saylaniwelfare.com/en/services/education/technical-education/saylani-mass-it-training)** is an exceptional institution launched by the **[Saylani Welfare International Trust of Pakistan](https://saylaniwelfare.com/en)**, dedicated to providing the latest IT skills to aspiring developers.
 
@@ -11,8 +11,7 @@ It is important to note that **[Saylani Mass IT Training Program(SMIT)](https://
 * Even like or dislike properties to make their browsing experience more interactive.
 
 Overall, **the FRONT_END of the Real Estate Mobile App** is an incredible piece of software that showcases the developer's excellent skills in creating a modern and functional mobile app with an intuitive user interface.
-
-
+<hr/>
 
 **[The Backend of The Real Estate Mobile App](https://github.com/Ahmadjajja/-Hackathon_Backend_2022_Batch_04)**
 
