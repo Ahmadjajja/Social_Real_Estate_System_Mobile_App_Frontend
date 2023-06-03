@@ -2,7 +2,7 @@
 
 It is important to note that **[Saylani Mass IT Training Program(SMIT)](https://saylaniwelfare.com/en/services/education/technical-education/saylani-mass-it-training)** is an exceptional institution launched by the **[Saylani Welfare International Trust of Pakistan](https://saylaniwelfare.com/en)**, dedicated to providing the latest IT skills to aspiring developers.
  <p align="center">
-<img src="https://drive.google.com/uc?export=view&id=1fe5C3IDUCKnAjIFxJzAXN1z3WP-QEGGN" alt="landing-page" width="50%" height="50%">
+<img src="https://drive.google.com/uc?export=view&id=1fe5C3IDUCKnAjIFxJzAXN1z3WP-QEGGN" alt="landing-page" width="30%" height="30%">
 </p>
 
 
