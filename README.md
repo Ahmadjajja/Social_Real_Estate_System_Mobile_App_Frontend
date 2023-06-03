@@ -2,6 +2,8 @@
 
 It is important to note that **[Saylani Mass IT Training Program(SMIT)](https://saylaniwelfare.com/en/services/education/technical-education/saylani-mass-it-training)** is an exceptional institution launched by the **[Saylani Welfare International Trust of Pakistan](https://saylaniwelfare.com/en)**, dedicated to providing the latest IT skills to aspiring developers.
 ![Landing-Page](https://drive.google.com/uc?export=view&id=1fe5C3IDUCKnAjIFxJzAXN1z3WP-QEGGN) <br />
+<img src="https://drive.google.com/uc?export=view&id=1fe5C3IDUCKnAjIFxJzAXN1z3WP-QEGGN" alt="landing-page" width="50%" height="50%"> <br />
+
 
 **The FRONT_END of the Real Estate Mobile App** is a truly impressive project, with a wide range of functionalities that make it a must-have for anyone in the real estate industry. It includes-
 * authentication functionality to ensure secure access, as well as 
